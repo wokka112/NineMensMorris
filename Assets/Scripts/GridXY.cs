@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class Grid<TGridObject>
+public class GridXY<TGridObject>
 {
     public event EventHandler<OnGridValueChangedEventArgs> OnGridObjectChanged;
     public class OnGridValueChangedEventArgs : EventArgs
@@ -17,14 +17,15 @@ public class Grid<TGridObject>
     private Vector3 originPosition;
 
     /**
-     * @param width the number of cells along the x-axis of the grid.
-     * @param height the number of cells along the y-axis of the grid.
+     * @param width the width of the grid (i.e. the number of cells along the x-axis of the grid)
+     * @param height the height of the grid (i.e. the number of cells along the y-axis of the grid).
      * @param cellSize the size of each cell in the grid
      * @param originPosition the bottom left corner of the grid in Vector3 coordinates
-     * @param createGridObject the function used when adding a grid object to the grid
+     * @param createGridObject the function used to create the starting object for each cell. This grid is passed as the first parameter, 
+     *        along with the x and y ints for each cell as it iterates over the grid.
      * @param showDebug whether to draw the grid in the world for debug purposes
      */
-    public Grid(int width, int height, float cellSize, Vector3 originPosition, Func<Grid<TGridObject>, int, int, TGridObject> createGridObject, bool showDebug = false)
+    public GridXY(int width, int height, float cellSize, Vector3 originPosition, Func<GridXY<TGridObject>, int, int, TGridObject> createGridObject, bool showDebug = false)
     {
         this.width = width;
         this.height = height;
