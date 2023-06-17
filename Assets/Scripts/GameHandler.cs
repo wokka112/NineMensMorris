@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class GameHandler : MonoBehaviour
 {
-    private int blackPieces = 0;
-    private int whitePieces = 0;
+    private int blackPiecesPlaced = 0;
+    private int whitePiecesPlaced = 0;
+    private int blackPiecesLeft = 0;
+    private int whitePiecesLeft = 0;
     private Space[] spaces;
-    private STATE currentState = STATE.SETUP;
+    private STATE currentState = STATE.SETUP_START;
     private PLAYER currentPlayer = PLAYER.WHITE;
 
 
@@ -28,22 +30,51 @@ public class GameHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (currentState == STATE.SETUP)
+        if (currentState == STATE.SETUP_START)
         {
-            // Get empty spaces
-            foreach(Space space in spaces)
-            {
-                if (space.IsEmpty())
-                {
-                    // Highlight them
-                    space.SetSelectable();
-                }
-            }
+            MakeAllEmptySpacesSelectable();
             
-            // Player clicks on an empty space
-            // We put a piece there
-            // Increment players pieces count
-            // Swap to other player
+        } else if (currentState == STATE.SETUP_WAIT_FOR_CLICK)
+        {
+            // Need event listener which waits for player click
+            
+            // When player clicks we get place they clicked
+            // If space exists there
+                // If space is selectable
+                    // Place piece
+                    // If player has 3 pieces in a row
+                        // They remove opponent's piece
+                    // Increment piece counters
+                    // If both players have placed 9 pieces
+                        // Switch to play state
+                    // Else
+                        // Switch to SETUP_START state
+                    // Make all spaces unselectable
+                    // Swap players
+                // Else
+                    // Warn player that they need to pick an empty space
+            // Else
+                // Ignore
+        }
+    }
+
+    private void MakeAllEmptySpacesSelectable()
+    {
+        foreach (Space space in spaces)
+        {
+            if (space.IsEmpty())
+            {
+                // Highlight them
+                space.SetSelectable();
+            }
+        }
+    }
+
+    private void MakeAllSpacesUnselectable()
+    {
+        foreach (Space space in spaces)
+        {
+            space.SetUnselectable();
         }
     }
 
@@ -53,10 +84,13 @@ public class GameHandler : MonoBehaviour
         WHITE
     }
 
+    //TODO move states into classes and have them contain their own processing logic?
+    // Could extend them off a State interface.
     private enum STATE
     {
-        SETUP,
+        SETUP_START,
+        SETUP_WAIT_FOR_CLICK,
         PLAY,
-        WIN
+        END
     }
 }

@@ -43,7 +43,7 @@ public class Space : MonoBehaviour
 
     private void UpdateColour()
     {
-        Debug.Log("Material colour updated to white");
-        renderer.material.color = Color.white;
+        Debug.Log("Material colour updated");
+        renderer.material.color = isSelectable ? Color.green : Color.black;
     }
 }
