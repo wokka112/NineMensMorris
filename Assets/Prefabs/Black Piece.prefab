@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2778251295115979768}
   - component: {fileID: 212504591718561371}
   - component: {fileID: 755190361936782590}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Black Piece
   m_TagString: Untagged
   m_Icon: {fileID: 0}

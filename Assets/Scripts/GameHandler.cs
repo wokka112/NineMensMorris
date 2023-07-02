@@ -8,7 +8,17 @@ public class GameHandler : MonoBehaviour
     private int whitePiecesPlaced = 0;
     private int blackPiecesLeft = 0;
     private int whitePiecesLeft = 0;
+
+    [SerializeField]
+    private LayerMask spaceLayer;
+    [SerializeField]
+    private LayerMask pieceLayer;
+    [SerializeField]
+    private GameObject blackPiece;
+    [SerializeField]
+    private GameObject whitePiece;
     private Space[] spaces;
+
     private STATE currentState = STATE.SETUP_START;
     private PLAYER currentPlayer = PLAYER.WHITE;
 
@@ -33,10 +43,58 @@ public class GameHandler : MonoBehaviour
         if (currentState == STATE.SETUP_START)
         {
             MakeAllEmptySpacesSelectable();
-            
+            currentState = STATE.SETUP_WAIT_FOR_CLICK;
         } else if (currentState == STATE.SETUP_WAIT_FOR_CLICK)
         {
             // Need event listener which waits for player click
+            if (Input.GetMouseButtonDown(0))
+            {
+                Debug.Log("Left-click");
+                Space space = GetSpaceClicked(Input.mousePosition);
+                if (space.IsEmpty())
+                {
+                    space.SetPiece(CreatePiece(space.GetPosition(), currentPlayer));
+                    // If player has 3 pieces in a row
+                        // They remove opponent's piece
+                    // Increment piece counters
+                    if (currentPlayer == PLAYER.WHITE)
+                    {
+                        Debug.Log("Incrementing white pieces");
+                        whitePiecesPlaced++;
+                        whitePiecesLeft++;
+                        Debug.Log("White pieces placed: " + whitePiecesPlaced + "\nWhite pieces left: " + whitePiecesLeft);
+                        
+                    } else
+                    {
+                        Debug.Log("Incrementing black pieces");
+                        blackPiecesPlaced++;
+                        blackPiecesLeft++;
+                        Debug.Log("Black pieces placed: " + blackPiecesPlaced + "\nBlack pieces left: " + blackPiecesLeft);
+                    }
+                    // If both players have placed 9 pieces
+                    if (currentPlayer == PLAYER.BLACK && blackPiecesPlaced == 9)
+                    {
+                        // Switch to play state
+                        Debug.Log("Switching to PLAY state");
+                        currentState = STATE.PLAY;
+                    }
+                    // Else
+                     else
+                    {
+                        Debug.Log("Switching back to SETUP state");
+                        currentState = STATE.SETUP_START;
+                    }
+
+                    MakeAllSpacesUnselectable();
+                    if (currentPlayer == PLAYER.WHITE)
+                    {
+                        currentPlayer = PLAYER.BLACK;
+                    } else
+                    {
+                        currentPlayer = PLAYER.WHITE;
+                    }
+                }
+            }
             
             // When player clicks we get place they clicked
             // If space exists there
@@ -75,6 +133,37 @@ public class GameHandler : MonoBehaviour
         foreach (Space space in spaces)
         {
             space.SetUnselectable();
+        }
+    }
+
+    private Space GetSpaceClicked(Vector3 mousePosition)
+    {
+        Space space = null;
+        RaycastHit hitData;
+
+        Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+        if (Physics.Raycast(ray, out hitData, 1000, spaceLayer))
+        {
+            Debug.Log("Hit object: " + hitData.transform.gameObject.name);
+            space = hitData.transform.GetComponent<Space>();
+        } else
+        {
+            Debug.Log("Didn't hit object!");
+        }
+
+        Debug.Log("Returning space: " + space.ToString());
+        return space;
+    }
+
+    private Piece CreatePiece(Vector3 position, PLAYER player)
+    {
+        if (player == PLAYER.BLACK)
+        {
+            //TODO No component Piece atm. Either need to make Piece a MonoBehaviour or look into how to store data in game object without adding unnecessary scripts.
+            return Instantiate(blackPiece, position, Quaternion.identity).GetComponent<Piece>();
+        } else
+        {
+            return Instantiate(whitePiece, position, Quaternion.identity).GetComponent<Piece>();
         }
     }
 

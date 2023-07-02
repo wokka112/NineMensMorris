@@ -41,9 +41,19 @@ public class Space : MonoBehaviour
         UpdateColour();
     }
 
+    public void SetPiece(Piece piece)
+    {
+        this.piece = piece;
+    }
+
     private void UpdateColour()
     {
         Debug.Log("Material colour updated");
         renderer.material.color = isSelectable ? Color.green : Color.black;
+    }
+
+    public override string ToString()
+    {
+        return "Space(" + transform.position.x + "," + transform.position.z + ")";
     }
 }

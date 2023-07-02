@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8827683425798872181}
   - component: {fileID: 581265590838499311}
   - component: {fileID: 1558954003397729739}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Line
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -144,3 +144,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98b45440f3d1ce8418791fac94017966, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spaces:
+  - {fileID: 0}
+  - {fileID: 0}
