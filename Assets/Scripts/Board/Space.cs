@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class Space : MonoBehaviour
 {
+    //TODO go through each space and assign neighbours and line positions
+
     [SerializeField]
     private List<Space> neighbours;
+    [SerializeField]
+    private LinePosition[] linePositions = new LinePosition[2];
 
     private Transform spaceObject;
     private Renderer renderer;
@@ -44,6 +48,16 @@ public class Space : MonoBehaviour
     public void SetPiece(Piece piece)
     {
         this.piece = piece;
+    }
+
+    public Piece GetPiece()
+    {
+        return piece;
+    }
+
+    public LinePosition[] GetLinePositions()
+    {
+        return (LinePosition[]) linePositions.Clone();
     }
 
     private void UpdateColour()

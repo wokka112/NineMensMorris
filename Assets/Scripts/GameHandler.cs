@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class GameHandler : MonoBehaviour
 {
-    private int blackPiecesPlaced = 0;
-    private int whitePiecesPlaced = 0;
+    private int piecesPlaced = 0;
+    private const int noOfPiecesToPlace = 9;
     private int blackPiecesLeft = 0;
     private int whitePiecesLeft = 0;
 
@@ -17,7 +17,9 @@ public class GameHandler : MonoBehaviour
     private GameObject blackPiece;
     [SerializeField]
     private GameObject whitePiece;
+    // Move this into board state
     private Space[] spaces;
+    private BoardState boardState;
 
     private STATE currentState = STATE.SETUP_START;
     private PLAYER currentPlayer = PLAYER.WHITE;
@@ -33,7 +35,7 @@ public class GameHandler : MonoBehaviour
         for (int i = 0; i < spaceObjects.Length; i++) {
             spaces[i] = spaceObjects[i].GetComponent<Space>();
         }
-
+        boardState = new BoardState(spaces);
         Debug.Log("Spaces: " + spaces.Length);
     }
 
@@ -53,29 +55,33 @@ public class GameHandler : MonoBehaviour
                 Space space = GetSpaceClicked(Input.mousePosition);
                 if (space.IsEmpty())
                 {
-                    space.SetPiece(CreatePiece(space.GetPosition(), currentPlayer));
-                    // If player has 3 pieces in a row
-                        // They remove opponent's piece
-                    // Increment piece counters
+                    Piece piece = CreatePiece(space.GetPosition(), currentPlayer);
+                    piece.SetSpace(space);
+                    space.SetPiece(piece);
+                    space.SetUnselectable();
+                    if (boardState.PieceMadeThreeInARow(piece))
+                    {
+                        Debug.Log("You made 3 in a row, woooo!");
+                    }
                     if (currentPlayer == PLAYER.WHITE)
                     {
                         Debug.Log("Incrementing white pieces");
-                        whitePiecesPlaced++;
                         whitePiecesLeft++;
-                        Debug.Log("White pieces placed: " + whitePiecesPlaced + "\nWhite pieces left: " + whitePiecesLeft);
+                        Debug.Log("White pieces left: " + whitePiecesLeft);
                         
                     } else
                     {
                         Debug.Log("Incrementing black pieces");
-                        blackPiecesPlaced++;
                         blackPiecesLeft++;
-                        Debug.Log("Black pieces placed: " + blackPiecesPlaced + "\nBlack pieces left: " + blackPiecesLeft);
+                        piecesPlaced++;
+                        Debug.Log("Black pieces left: " + blackPiecesLeft);
                     }
                     // If both players have placed 9 pieces
-                    if (currentPlayer == PLAYER.BLACK && blackPiecesPlaced == 9)
+                    if (piecesPlaced == noOfPiecesToPlace)
                     {
                         // Switch to play state
                         Debug.Log("Switching to PLAY state");
+                        MakeAllSpacesUnselectable();
                         currentState = STATE.PLAY;
                     }
                     // Else
@@ -85,7 +91,6 @@ public class GameHandler : MonoBehaviour
                         currentState = STATE.SETUP_START;
                     }
 
-                    MakeAllSpacesUnselectable();
                     if (currentPlayer == PLAYER.WHITE)
                     {
                         currentPlayer = PLAYER.BLACK;
@@ -116,6 +121,7 @@ public class GameHandler : MonoBehaviour
         }
     }
 
+    //TODO move these make alls into board state
     private void MakeAllEmptySpacesSelectable()
     {
         foreach (Space space in spaces)
@@ -159,7 +165,6 @@ public class GameHandler : MonoBehaviour
     {
         if (player == PLAYER.BLACK)
         {
-            //TODO No component Piece atm. Either need to make Piece a MonoBehaviour or look into how to store data in game object without adding unnecessary scripts.
             return Instantiate(blackPiece, position, Quaternion.identity).GetComponent<Piece>();
         } else
         {
