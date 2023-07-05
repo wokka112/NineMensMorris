@@ -17,8 +17,7 @@ public class GameHandler : MonoBehaviour
     private GameObject blackPiece;
     [SerializeField]
     private GameObject whitePiece;
-    // Move this into board state
-    private Space[] spaces;
+
     private BoardState boardState;
 
     private STATE currentState = STATE.SETUP_START;
@@ -31,12 +30,11 @@ public class GameHandler : MonoBehaviour
         Debug.Log("Game starting!");
         Debug.Log("Prepare to place your pieces!");
         GameObject[] spaceObjects = GameObject.FindGameObjectsWithTag("Space");
-        spaces = new Space[spaceObjects.Length]; 
+        Space[] spaces = new Space[spaceObjects.Length]; 
         for (int i = 0; i < spaceObjects.Length; i++) {
             spaces[i] = spaceObjects[i].GetComponent<Space>();
         }
-        boardState = new BoardState(spaces);
-        Debug.Log("Spaces: " + spaces.Length);
+        boardState = new BoardState(spaces, spaceLayer, pieceLayer);
     }
 
     // Update is called once per frame
@@ -44,22 +42,22 @@ public class GameHandler : MonoBehaviour
     {
         if (currentState == STATE.SETUP_START)
         {
-            MakeAllEmptySpacesSelectable();
+            boardState.MakeAllEmptySpacesSelectable();
             currentState = STATE.SETUP_WAIT_FOR_CLICK;
         } else if (currentState == STATE.SETUP_WAIT_FOR_CLICK)
         {
             // Need event listener which waits for player click
             if (Input.GetMouseButtonDown(0))
             {
-                Debug.Log("Left-click");
-                Space space = GetSpaceClicked(Input.mousePosition);
+                //TODO how much of this to move into BoardState? Do I move instantiate into there via GameObject? Do I move all of this in there except for the state transitions?
+                Space space = boardState.GetSpaceClicked(Input.mousePosition);
                 if (space.IsEmpty())
                 {
                     Piece piece = CreatePiece(space.GetPosition(), currentPlayer);
                     piece.SetSpace(space);
                     space.SetPiece(piece);
                     space.SetUnselectable();
-                    if (boardState.PieceMadeThreeInARow(piece))
+                    if (boardState.PieceMadeAMill(piece))
                     {
                         Debug.Log("You made 3 in a row, woooo!");
                     }
@@ -81,7 +79,7 @@ public class GameHandler : MonoBehaviour
                     {
                         // Switch to play state
                         Debug.Log("Switching to PLAY state");
-                        MakeAllSpacesUnselectable();
+                        boardState.MakeAllSpacesUnselectable();
                         currentState = STATE.PLAY;
                     }
                     // Else
@@ -112,53 +110,13 @@ public class GameHandler : MonoBehaviour
                         // Switch to play state
                     // Else
                         // Switch to SETUP_START state
-                    // Make all spaces unselectable
+                    // Make all allSpaces unselectable
                     // Swap players
                 // Else
                     // Warn player that they need to pick an empty space
             // Else
                 // Ignore
         }
-    }
-
-    //TODO move these make alls into board state
-    private void MakeAllEmptySpacesSelectable()
-    {
-        foreach (Space space in spaces)
-        {
-            if (space.IsEmpty())
-            {
-                // Highlight them
-                space.SetSelectable();
-            }
-        }
-    }
-
-    private void MakeAllSpacesUnselectable()
-    {
-        foreach (Space space in spaces)
-        {
-            space.SetUnselectable();
-        }
-    }
-
-    private Space GetSpaceClicked(Vector3 mousePosition)
-    {
-        Space space = null;
-        RaycastHit hitData;
-
-        Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-        if (Physics.Raycast(ray, out hitData, 1000, spaceLayer))
-        {
-            Debug.Log("Hit object: " + hitData.transform.gameObject.name);
-            space = hitData.transform.GetComponent<Space>();
-        } else
-        {
-            Debug.Log("Didn't hit object!");
-        }
-
-        Debug.Log("Returning space: " + space.ToString());
-        return space;
     }
 
     private Piece CreatePiece(Vector3 position, PLAYER player)

@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class Space : MonoBehaviour
 {
-    //TODO go through each space and assign neighbours and line positions
-
     [SerializeField]
     private List<Space> neighbours;
     [SerializeField]
-    private LinePosition[] linePositions = new LinePosition[2];
+    private LinePosition[] lines = new LinePosition[2];
 
     private Transform spaceObject;
-    private Renderer renderer;
+    private Renderer componentRenderer;
     private Piece piece;
 
     private bool isSelectable;
@@ -20,7 +18,7 @@ public class Space : MonoBehaviour
     private void Awake()
     {
         this.spaceObject = GetComponent<Transform>();
-        this.renderer = GetComponent<Renderer>();
+        this.componentRenderer = GetComponent<Renderer>();
     }
 
     public Vector3 GetPosition()
@@ -57,13 +55,12 @@ public class Space : MonoBehaviour
 
     public LinePosition[] GetLinePositions()
     {
-        return (LinePosition[]) linePositions.Clone();
+        return (LinePosition[]) lines.Clone();
     }
 
     private void UpdateColour()
     {
-        Debug.Log("Material colour updated");
-        renderer.material.color = isSelectable ? Color.green : Color.black;
+        componentRenderer.material.color = isSelectable ? Color.green : Color.black;
     }
 
     public override string ToString()
