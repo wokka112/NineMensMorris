@@ -4,90 +4,57 @@ using UnityEngine;
 
 public class BoardState
 {
+    private GameObject blackPiecePrefab;
+    private GameObject whitePiecePrefab;
+
     private Space[] allSpaces;
-    private Dictionary<LinePosition, Space[]> lines;
+    private List<Piece> whitePieces;
+    private List<Piece> blackPieces;
     private LayerMask spaceLayer;
     private LayerMask pieceLayer;
+    private Player currentPlayer;
 
-    public BoardState(Space[] allSpaces, LayerMask spaceLayer, LayerMask pieceLayer)
+    public BoardState(Space[] allSpaces, GameObject blackPiecePrefab, GameObject whitePiecePrefab, LayerMask spaceLayer, LayerMask pieceLayer)
     {
         this.allSpaces = allSpaces;
+        this.blackPiecePrefab = blackPiecePrefab;
+        this.whitePiecePrefab = whitePiecePrefab;
         this.spaceLayer = spaceLayer;
         this.pieceLayer = pieceLayer;
-
-        lines = new Dictionary<LinePosition, Space[]>();
-        foreach (Space space in allSpaces) {
-            foreach(LinePosition linePosition in space.GetLinePositions())
-            {
-                if (!lines.TryGetValue(linePosition, out Space[] lineSpaces))
-                {
-                    lineSpaces = new Space[3];
-                    lineSpaces[0] = space;
-                    lines.Add(linePosition, lineSpaces);
-                } else if (lineSpaces[1] == null)
-                {
-                    lineSpaces[1] = space;
-                } else if (lineSpaces[2] == null)
-                {
-                    lineSpaces[2] = space;
-                } else
-                {
-                    Debug.LogError("Spaces already full for line position: " + linePosition + ". Not adding this space to line position: " + space);
-                }
-            }
-        }
+        this.whitePieces = new List<Piece>();
+        this.blackPieces = new List<Piece>();
+        this.currentPlayer = Player.WHITE;
     }
 
-    private void LogLines()
+    public Piece AddPieceToBoard(Space space)
     {
-        foreach (LinePosition linePosition in lines.Keys)
+        if (!space.IsEmpty())
         {
-            Debug.Log("Getting lines for " + linePosition);
-            lines.TryGetValue(linePosition, out Space[] lineSpaces);
-            for (int i = 0; i < lineSpaces.Length; i++)
-            {
-                Debug.Log("Space " + i + ": " + lineSpaces[i]);
-            }
+            return null;
         }
+
+        Piece piece = CreatePiece(space.GetPosition());
+        space.SetPiece(piece);
+        piece.SetSpace(space);
+
+        return piece;
     }
 
-    public bool PieceMadeAMill(Piece piece)
+    private Piece CreatePiece(Vector3 position)
     {
-        Space space = piece.GetSpace();
-        foreach (LinePosition linePosition in space.GetLinePositions())
+        Piece piece;
+        if (currentPlayer == Player.BLACK)
         {
-            if (LineFilledBySameColour(linePosition))
-            {
-                return true;
-            }
+            piece = GameObject.Instantiate(blackPiecePrefab, position, Quaternion.identity).GetComponent<Piece>();
+            blackPieces.Add(piece);
+        }
+        else
+        {
+            piece = GameObject.Instantiate(whitePiecePrefab, position, Quaternion.identity).GetComponent<Piece>();
+            whitePieces.Add(piece);
         }
 
-        return false;
-    }
-
-    public bool LineFilledBySameColour(LinePosition linePosition)
-    {
-        lines.TryGetValue(linePosition, out Space[] lineSpaces);
-        if (lineSpaces[0].IsEmpty())
-        {
-            return false;
-        }
-
-        Piece.PieceColour colour = lineSpaces[0].GetPiece().GetColour();
-        for (int i = 1; i < lineSpaces.Length; i++)
-        {
-            if (lineSpaces[i].IsEmpty())
-            { 
-                return false;
-            }
-
-            if (lineSpaces[i].GetPiece().GetColour() != colour)
-            {
-                return false;
-            }
-        }
-
-        return true;
+        return piece;
     }
 
     public void MakeAllEmptySpacesSelectable()
@@ -111,6 +78,7 @@ public class BoardState
 
     public Space GetSpaceClicked(Vector3 mousePosition)
     {
+        Debug.Log("Getting space clicked");
         Space space = null;
         RaycastHit hitData;
 
@@ -118,8 +86,8 @@ public class BoardState
         if (Physics.Raycast(ray, out hitData, 1000, spaceLayer))
         {
             Debug.Log("Hit object: " + hitData.transform.gameObject.name);
-            Debug.Log("Returning space: " + space.ToString());
             space = hitData.transform.GetComponent<Space>();
+            Debug.Log("Returning space: " + space.ToString());
         }
         else
         {
@@ -127,5 +95,21 @@ public class BoardState
         }
 
         return space;
+    }
+
+    public Player GetCurrentPlayer()
+    {
+        return currentPlayer;
+    }
+
+    public void SwitchPlayer()
+    {
+        if (currentPlayer == Player.WHITE)
+        {
+            currentPlayer = Player.BLACK;
+        } else
+        {
+            currentPlayer = Player.WHITE;
+        }
     }
 }

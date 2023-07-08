@@ -5,10 +5,10 @@ using UnityEngine;
 public class Piece : MonoBehaviour
 {
     [SerializeField]
-    private PieceColour colour;
+    private Colour colour;
     private Space space;
 
-    public PieceColour GetColour()
+    public Colour GetColour()
     {
         return colour;
     }
@@ -23,7 +23,12 @@ public class Piece : MonoBehaviour
         this.space = space;
     }
 
-    public enum PieceColour
+    public bool IsPartOfAMill()
+    {
+        return space.IsPartOfAMill();
+    }
+
+    public enum Colour
     {
         WHITE,
         BLACK

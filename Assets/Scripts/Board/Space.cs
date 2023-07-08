@@ -6,8 +6,7 @@ public class Space : MonoBehaviour
 {
     [SerializeField]
     private List<Space> neighbours;
-    [SerializeField]
-    private LinePosition[] lines = new LinePosition[2];
+    private List<Line> lines;
 
     private Transform spaceObject;
     private Renderer componentRenderer;
@@ -19,6 +18,7 @@ public class Space : MonoBehaviour
     {
         this.spaceObject = GetComponent<Transform>();
         this.componentRenderer = GetComponent<Renderer>();
+        this.lines = new List<Line>();
     }
 
     public Vector3 GetPosition()
@@ -53,9 +53,17 @@ public class Space : MonoBehaviour
         return piece;
     }
 
-    public LinePosition[] GetLinePositions()
+    public bool IsPartOfAMill()
     {
-        return (LinePosition[]) lines.Clone();
+        foreach (Line line in lines)
+        {
+            if (line.IsAMill())
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void UpdateColour()
@@ -66,5 +74,10 @@ public class Space : MonoBehaviour
     public override string ToString()
     {
         return "Space(" + transform.position.x + "," + transform.position.z + ")";
+    }
+
+    public void AddLine(Line line)
+    {
+        lines.Add(line);
     }
 }
