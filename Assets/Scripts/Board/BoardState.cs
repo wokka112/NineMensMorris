@@ -76,6 +76,43 @@ public class BoardState
         }
     }
 
+    public void MakeWhitePiecesSelectable()
+    {
+        MakePiecesSelectable(whitePieces);
+    }
+
+    public void MakeBlackPiecesSelectable()
+    {
+        MakePiecesSelectable(blackPieces);
+    }
+
+    public void MakeWhitePiecesUnselectable()
+    {
+        MakePiecesUnselectable(whitePieces);
+    }
+
+    public void MakeBlackPiecesunSelectable()
+    {
+        MakePiecesUnselectable(blackPieces);
+    }
+
+    //TODO: Is it worth only making pieces with at least 1 empty space as a neighbour selectable?
+    private void MakePiecesSelectable(List<Piece> pieces)
+    {
+        foreach (Piece piece in pieces)
+        {
+            piece.SetSelectable();
+        }
+    }
+
+    private void MakePiecesUnselectable(List<Piece> pieces)
+    {
+        foreach(Piece piece in pieces)
+        {
+            piece.SetUnselectable();
+        }
+    }
+
     public Space GetSpaceClicked(Vector3 mousePosition)
     {
         Debug.Log("Getting space clicked");

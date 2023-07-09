@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SetupState : IGameState
 {
-    private const IGameState.STATE state = IGameState.STATE.SETUP;
+    private const IGameState.GameState state = IGameState.GameState.Board_Setup;
 
     private BoardState boardState;
     private GameStateMachine stateMachine;
@@ -24,7 +24,7 @@ public class SetupState : IGameState
         {
             Debug.Log("Mouse clicked!");
             Space space = boardState.GetSpaceClicked(Input.mousePosition);
-            if (space != null && space.IsEmpty())
+            if (space != null && space.IsSelectable())
             {
                 Piece piece = boardState.AddPieceToBoard(space);
                 if (piece == null)
@@ -37,6 +37,7 @@ public class SetupState : IGameState
                     space.SetUnselectable();
                     if (piece.IsPartOfAMill())
                     {
+                        //TODO add piece removal logic here
                         Debug.Log("You made 3 in a row, woooo!");
                     }
 
@@ -45,8 +46,9 @@ public class SetupState : IGameState
                         piecesPlaced++;
                         if (piecesPlaced == noOfPiecesToPlace)
                         {
-                            Debug.Log("Switching to PLAY state");
-                            stateMachine.SetCurrentState(IGameState.STATE.PLAY);
+                            Debug.Log("Switching to Play_Turn_state state");
+                            boardState.MakeAllSpacesUnselectable();
+                            stateMachine.SetCurrentState(IGameState.GameState.Turn_Start);
                         }
                     }
 
@@ -56,7 +58,7 @@ public class SetupState : IGameState
         }
     }
 
-    public IGameState.STATE GetState()
+    public IGameState.GameState GetState()
     {
         return state;
     }   

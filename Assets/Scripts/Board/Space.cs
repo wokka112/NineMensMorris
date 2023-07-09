@@ -31,6 +31,11 @@ public class Space : MonoBehaviour
         return piece == null;
     }
 
+    public bool IsSelectable()
+    {
+        return isSelectable;
+    }
+
     public void SetSelectable()
     {
         isSelectable = true;

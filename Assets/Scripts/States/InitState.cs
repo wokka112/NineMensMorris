@@ -6,7 +6,7 @@ public class InitState : IGameState
 {
     private GameStateMachine stateMachine;
     private BoardState boardState;
-    private IGameState.STATE state = IGameState.STATE.INIT;
+    private IGameState.GameState state = IGameState.GameState.Init;
     
 
     public InitState(GameStateMachine stateMachine, BoardState boardState)
@@ -20,10 +20,10 @@ public class InitState : IGameState
     {
         //Debug.Log("Processing init state");
         boardState.MakeAllEmptySpacesSelectable();
-        stateMachine.SetCurrentState(IGameState.STATE.SETUP);
+        stateMachine.SetCurrentState(IGameState.GameState.Board_Setup);
     }
 
-    public IGameState.STATE GetState()
+    public IGameState.GameState GetState()
     {
         return state;
     }
