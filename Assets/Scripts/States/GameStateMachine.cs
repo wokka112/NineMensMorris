@@ -43,10 +43,13 @@ public class GameStateMachine
         IGameState initState = new InitState(this, boardState);
         gameStates.Add(initState.GetState(), initState);
 
-        IGameState setupState = new SetupState(this, boardState);
+        IGameState setupState = new BoardSetupState(this, boardState);
         gameStates.Add(setupState.GetState(), setupState);
 
         IGameState turnStartState = new TurnStartState(this, boardState);
         gameStates.Add(turnStartState.GetState(), turnStartState);
+
+        IGameState turnSetupState = new TurnSetupState(this, boardState);
+        gameStates.Add(turnSetupState.GetState(), turnSetupState);
     }
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SetupState : IGameState
+public class BoardSetupState : IGameState
 {
     private const IGameState.GameState state = IGameState.GameState.Board_Setup;
 
@@ -11,7 +11,7 @@ public class SetupState : IGameState
     private int piecesPlaced = 0;
     private const int noOfPiecesToPlace = 9;
 
-    public SetupState(GameStateMachine stateMachine, BoardState boardState)
+    public BoardSetupState(GameStateMachine stateMachine, BoardState boardState)
     {
         this.stateMachine = stateMachine;
         this.boardState = boardState;
@@ -48,7 +48,7 @@ public class SetupState : IGameState
                         {
                             Debug.Log("Switching to Play_Turn_state state");
                             boardState.MakeAllSpacesUnselectable();
-                            stateMachine.SetCurrentState(IGameState.GameState.Turn_Start);
+                            stateMachine.SetCurrentState(IGameState.GameState.Turn_Setup);
                         }
                     }
 

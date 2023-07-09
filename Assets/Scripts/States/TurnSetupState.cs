@@ -2,15 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// TODO change this to PlayTurnSetupState? Then could add a TurnStartState which would show a UI message saying whose turn it is?
-public class TurnStartState : IGameState
+public class TurnSetupState : IGameState
 {
-    private const IGameState.GameState state = IGameState.GameState.Turn_Start;
+    private const IGameState.GameState state = IGameState.GameState.Turn_Setup;
 
     private GameStateMachine stateMachine;
     private BoardState boardState;
 
-    public TurnStartState(GameStateMachine stateMachine, BoardState boardState)
+    public TurnSetupState(GameStateMachine stateMachine, BoardState boardState)
     {
         this.stateMachine = stateMachine;
         this.boardState = boardState;

@@ -13,6 +13,7 @@ public interface IGameState
         Init,
         Board_Setup,
         Turn_Start,
+        Turn_Setup,
         Turn_Pick_Piece,
         Turn_Move_Piece,
         Turn_Remove_Piece,
