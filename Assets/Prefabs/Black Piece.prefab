@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 212504591718561371}
   - component: {fileID: 755190361936782590}
   - component: {fileID: 4779509576591689911}
+  - component: {fileID: -8030163680070596068}
   m_Layer: 7
   m_Name: Black Piece
   m_TagString: Untagged
@@ -97,3 +98,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colour: 1
+--- !u!65 &-8030163680070596068
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1732639817669634464}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.0000001, y: 2, z: 1.0000002}
+  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}

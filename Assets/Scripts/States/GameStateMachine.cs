@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class GameStateMachine
 {
+    private IGameState previousState;
     private IGameState currentState;
     private BoardState boardState;
     private Dictionary<IGameState.GameState, IGameState> gameStates;
-
 
     public GameStateMachine(BoardState boardState)
     {
@@ -31,9 +31,19 @@ public class GameStateMachine
             // Switch to error state
         } else
         {
-            Debug.Log("GameState set");
-            currentState = nextState;
+            SetCurrentState(nextState);
         }
+    }
+
+    public void SetCurrentState(IGameState nextState)
+    {
+        previousState = currentState;
+        currentState = nextState;
+    }
+
+    public IGameState GetPreviousState()
+    {
+        return previousState;
     }
 
     private void SetupStates()
@@ -51,5 +61,14 @@ public class GameStateMachine
 
         IGameState turnSetupState = new TurnSetupState(this, boardState);
         gameStates.Add(turnSetupState.GetState(), turnSetupState);
+
+        IGameState turnPickPieceState = new TurnPickPieceState(this, boardState);
+        gameStates.Add(turnPickPieceState.GetState(), turnPickPieceState);
+
+        IGameState turnMovePieceState = new TurnMovePieceState(this, boardState);
+        gameStates.Add(turnMovePieceState.GetState(), turnMovePieceState);
+
+        IGameState turnEndState = new TurnEndState(this, boardState);
+        gameStates.Add(turnEndState.GetState(), turnEndState);
     }
 }

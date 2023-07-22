@@ -19,17 +19,15 @@ public class BoardSetupState : IGameState
 
     public void Process()
     {
-        //Debug.Log("Processing setup state");
         if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("Mouse clicked!");
             Space space = boardState.GetSpaceClicked(Input.mousePosition);
             if (space != null && space.IsSelectable())
             {
                 Piece piece = boardState.AddPieceToBoard(space);
                 if (piece == null)
                 {
-                    Debug.LogError("Something went wrong while creating the new piec!");
+                    Debug.LogError("Something went wrong while creating the new piece!");
 
                 }
                 else
@@ -37,8 +35,8 @@ public class BoardSetupState : IGameState
                     space.SetUnselectable();
                     if (piece.IsPartOfAMill())
                     {
-                        //TODO add piece removal logic here
-                        Debug.Log("You made 3 in a row, woooo!");
+                        // Switch to remove piece state
+                        // How do we track the pieces placed? Put it in the board state?
                     }
 
                     if (boardState.GetCurrentPlayer() == Player.BLACK)
@@ -46,7 +44,6 @@ public class BoardSetupState : IGameState
                         piecesPlaced++;
                         if (piecesPlaced == noOfPiecesToPlace)
                         {
-                            Debug.Log("Switching to Play_Turn_state state");
                             boardState.MakeAllSpacesUnselectable();
                             stateMachine.SetCurrentState(IGameState.GameState.Turn_Setup);
                         }

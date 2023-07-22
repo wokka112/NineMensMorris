@@ -16,9 +16,9 @@ public interface IGameState
         Turn_Setup,
         Turn_Pick_Piece,
         Turn_Move_Piece,
-        Turn_Remove_Piece,
-        Check_End_Condition,
-        End
+        Turn_End,
+        Remove_Piece,
+        Game_End
     }
 
     // PLAY_TURN_START - highlights selectable pieces 

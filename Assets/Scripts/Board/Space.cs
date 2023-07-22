@@ -21,6 +21,11 @@ public class Space : MonoBehaviour
         this.lines = new List<Line>();
     }
 
+    public List<Space> GetNeighbours()
+    {
+        return neighbours;
+    }
+
     public Vector3 GetPosition()
     {
         return spaceObject.position;
@@ -51,6 +56,11 @@ public class Space : MonoBehaviour
     public void SetPiece(Piece piece)
     {
         this.piece = piece;
+    }
+
+    public void RemovePiece()
+    {
+        this.piece = null;
     }
 
     public Piece GetPiece()

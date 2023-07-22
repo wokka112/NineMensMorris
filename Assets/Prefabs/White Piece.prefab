@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5392772249692296510}
   - component: {fileID: 4697447658459606503}
   - component: {fileID: 8527389297870819013}
+  - component: {fileID: -8792673903171017739}
   m_Layer: 7
   m_Name: White Piece
   m_TagString: Untagged
@@ -97,3 +98,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colour: 0
+--- !u!65 &-8792673903171017739
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7943370554196305427}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.0000001, y: 2, z: 1.0000002}
+  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}

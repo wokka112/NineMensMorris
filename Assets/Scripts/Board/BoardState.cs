@@ -13,6 +13,7 @@ public class BoardState
     private LayerMask spaceLayer;
     private LayerMask pieceLayer;
     private Player currentPlayer;
+    private Piece selectedPiece = null;
 
     public BoardState(Space[] allSpaces, GameObject blackPiecePrefab, GameObject whitePiecePrefab, LayerMask spaceLayer, LayerMask pieceLayer)
     {
@@ -24,6 +25,21 @@ public class BoardState
         this.whitePieces = new List<Piece>();
         this.blackPieces = new List<Piece>();
         this.currentPlayer = Player.WHITE;
+    }
+
+    public void SetSelectedPiece(Piece piece)
+    {
+        this.selectedPiece = piece;
+    }
+
+    public void DeselectSelectedPiece()
+    {
+        this.selectedPiece = null;
+    }
+
+    public Piece GetSelectedPiece()
+    {
+        return selectedPiece;
     }
 
     public Piece AddPieceToBoard(Space space)
@@ -91,9 +107,20 @@ public class BoardState
         MakePiecesUnselectable(whitePieces);
     }
 
-    public void MakeBlackPiecesunSelectable()
+    public void MakeBlackPiecesUnselectable()
     {
         MakePiecesUnselectable(blackPieces);
+    }
+
+    public void MakeCurrentPlayersPiecesUnselectable()
+    {
+        if (currentPlayer == Player.WHITE)
+        {
+            MakeWhitePiecesUnselectable();
+        } else
+        {
+            MakeBlackPiecesUnselectable();
+        }
     }
 
     //TODO: Is it worth only making pieces with at least 1 empty space as a neighbour selectable?
@@ -115,23 +142,47 @@ public class BoardState
 
     public Space GetSpaceClicked(Vector3 mousePosition)
     {
-        Debug.Log("Getting space clicked");
         Space space = null;
         RaycastHit hitData;
 
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);
         if (Physics.Raycast(ray, out hitData, 1000, spaceLayer))
         {
-            Debug.Log("Hit object: " + hitData.transform.gameObject.name);
             space = hitData.transform.GetComponent<Space>();
-            Debug.Log("Returning space: " + space.ToString());
-        }
-        else
-        {
-            Debug.Log("Didn't hit object!");
         }
 
         return space;
+    }
+
+    public Piece GetPieceClicked(Vector3 mousePosition)
+    {
+        Piece piece = null;
+        RaycastHit hitData;
+
+        Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+        if (Physics.Raycast(ray, out hitData, 1000, pieceLayer))
+        {
+            Debug.Log("Ray hit something: " + hitData);
+            piece = hitData.transform.GetComponent<Piece>();
+        }
+
+        return piece;
+    }
+
+    public void MakeMovableSpacesSelectable(Piece piece)
+    {
+        Space space = piece.GetSpace();
+        if (space == null)
+        {
+            // TODO throw an exception maybe? Can catch, log and then switch to different state?
+            Debug.LogError("This piece has no space!");
+            return;
+        }
+
+        space.GetNeighbours().ForEach(delegate(Space space)
+        {
+            space.SetSelectable();
+        });
     }
 
     public Player GetCurrentPlayer()
