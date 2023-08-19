@@ -17,16 +17,8 @@ public class TurnEndState : IGameState
 
     public void Process()
     {
-        if (boardState.GetSelectedPiece().IsPartOfAMill())
-        {
-            stateMachine.SetCurrentState(IGameState.GameState.Remove_Piece);
-        } else
-        {
-            boardState.SwitchPlayer();
-            stateMachine.SetCurrentState(IGameState.GameState.Turn_Start);
-        }
-
-        boardState.DeselectSelectedPiece();
+        boardState.SwitchPlayer();
+        stateMachine.SetCurrentState(IGameState.GameState.Turn_Start);
     }
 
     public IGameState.GameState GetState()

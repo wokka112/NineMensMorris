@@ -17,14 +17,14 @@ public class TurnSetupState : IGameState
 
     public void Process()
     {
-        // Highlight selectable pieces.
         if (boardState.GetCurrentPlayer() == Player.WHITE)
-        {
-            // TODO change this so it only makes pieces that can move selectable
-            boardState.MakeWhitePiecesSelectable();
+        { 
+            boardState.MakeWhitePiecesThatCanMoveSelectable();
+            //TODO need to add in win condition here - if nothing can move, white loses
         } else
         {
-            boardState.MakeBlackPiecesSelectable();
+            boardState.MakeBlackPiecesThatCanMoveSelectable();
+            // TODO need to add in win condition here - if nothing can move, black loses
         }
 
         stateMachine.SetCurrentState(IGameState.GameState.Turn_Pick_Piece);

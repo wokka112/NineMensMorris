@@ -35,8 +35,9 @@ public class BoardSetupState : IGameState
                     space.SetUnselectable();
                     if (piece.IsPartOfAMill())
                     {
-                        // Switch to remove piece state
-                        // How do we track the pieces placed? Put it in the board state?
+                        boardState.MakeAllSpacesUnselectable();
+                        stateMachine.SetCurrentState(IGameState.GameState.Remove_Piece);
+                        return;
                     }
 
                     if (boardState.GetCurrentPlayer() == Player.BLACK)

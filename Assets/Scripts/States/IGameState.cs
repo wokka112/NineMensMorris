@@ -16,6 +16,7 @@ public interface IGameState
         Turn_Setup,
         Turn_Pick_Piece,
         Turn_Move_Piece,
+        Turn_Decision_Making,
         Turn_End,
         Remove_Piece,
         Game_End

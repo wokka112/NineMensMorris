@@ -73,6 +73,41 @@ public class BoardState
         return piece;
     }
 
+    public void RemovePiece(Piece piece)
+    {
+        piece.GetSpace().RemovePiece();
+        if (piece.GetColour() == Piece.Colour.WHITE)
+        {
+            whitePieces.Remove(piece);
+        } else
+        {
+            blackPieces.Remove(piece);
+        }
+
+        GameObject.Destroy(piece.gameObject);
+    }
+
+    public bool IsGameOver()
+    {
+        return whitePieces.Count <= 2 || blackPieces.Count <= 2;
+    }
+
+    public Player GetWinner()
+    {
+        if (blackPieces.Count <= 2)
+        {
+            return Player.WHITE;
+        }
+        else if (whitePieces.Count <= 2)
+        {
+            return Player.BLACK;
+        } else
+        {
+            //TODO change to dif exception. Make a homemade exception. Or just log or something
+            throw new System.Exception("Nobody won yet!");
+        }
+    }
+
     public void MakeAllEmptySpacesSelectable()
     {
         foreach (Space space in allSpaces)
@@ -123,7 +158,27 @@ public class BoardState
         }
     }
 
-    //TODO: Is it worth only making pieces with at least 1 empty space as a neighbour selectable?
+    public void MakeWhitePiecesThatCanMoveSelectable()
+    {
+        MakePiecesThatCanMoveSelectable(whitePieces);
+    }
+
+    public void MakeBlackPiecesThatCanMoveSelectable()
+    {
+        MakePiecesThatCanMoveSelectable(blackPieces);
+    }
+
+    private void MakePiecesThatCanMoveSelectable(List<Piece> pieces)
+    {
+        foreach(Piece piece in pieces)
+        {
+            if (piece.GetSpace().HasEmptyNeighbour())
+            {
+                piece.SetSelectable();
+            }
+        }
+    }
+
     private void MakePiecesSelectable(List<Piece> pieces)
     {
         foreach (Piece piece in pieces)
@@ -137,6 +192,35 @@ public class BoardState
         foreach(Piece piece in pieces)
         {
             piece.SetUnselectable();
+        }
+    }
+
+    public void MakeWhiteRemovablePiecesSelectable()
+    {
+        MakeRemovablePiecesSelectable(whitePieces);
+    }
+
+    public void MakeBlackRemovablePiecesSelectable()
+    {
+        MakeRemovablePiecesSelectable(blackPieces);
+    }
+
+    private void MakeRemovablePiecesSelectable(List<Piece> pieces)
+    {
+        bool allInMills = true;
+
+        foreach (Piece piece in pieces)
+        {
+            if (!piece.IsPartOfAMill())
+            {
+                piece.SetSelectable();
+                allInMills = false;
+            }
+        }
+
+        if (allInMills)
+        {
+            MakePiecesSelectable(pieces);
         }
     }
 

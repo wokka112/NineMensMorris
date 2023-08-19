@@ -68,7 +68,16 @@ public class GameStateMachine
         IGameState turnMovePieceState = new TurnMovePieceState(this, boardState);
         gameStates.Add(turnMovePieceState.GetState(), turnMovePieceState);
 
+        IGameState turnDecisionMakingState = new TurnDecisionMakingState(this, boardState);
+        gameStates.Add(turnDecisionMakingState.GetState(), turnDecisionMakingState);
+
         IGameState turnEndState = new TurnEndState(this, boardState);
         gameStates.Add(turnEndState.GetState(), turnEndState);
+
+        IGameState removePieceState = new RemovePieceState(this, boardState);
+        gameStates.Add(removePieceState.GetState(), removePieceState);
+
+        IGameState gameEndState = new GameEndState(this, boardState);
+        gameStates.Add(gameEndState.GetState(), gameEndState);
     }
 }

@@ -25,7 +25,7 @@ public class TurnMovePieceState : IGameState
                 Piece piece = boardState.GetSelectedPiece();
                 piece.Move(space);
                 boardState.MakeAllSpacesUnselectable();
-                stateMachine.SetCurrentState(IGameState.GameState.Turn_End);
+                stateMachine.SetCurrentState(IGameState.GameState.Turn_Decision_Making);
             } else
             {
                 Debug.Log("Please click a selectable space");
@@ -33,6 +33,7 @@ public class TurnMovePieceState : IGameState
         } else if (Input.GetMouseButtonDown(1))
         {
             boardState.DeselectSelectedPiece();
+            boardState.MakeAllSpacesUnselectable();
             stateMachine.SetCurrentState(IGameState.GameState.Turn_Setup);
         }
     }

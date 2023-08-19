@@ -31,6 +31,19 @@ public class Space : MonoBehaviour
         return spaceObject.position;
     }
 
+    public bool HasEmptyNeighbour()
+    {
+        foreach (Space space in neighbours)
+        {
+            if (space.IsEmpty())
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public bool IsEmpty()
     {
         return piece == null;
