@@ -27,7 +27,13 @@ public class GameEndState : IGameState
 
     private void AnnounceWinner()
     {
-        Player winner = boardState.GetWinner();
-        Debug.Log(winner + " won!!!!");
+        Player? winner = boardState.GetWinner();
+        if (winner == null)
+        {
+            Debug.Log("Something went wrong. Return to menu");
+        } else
+        {
+            Debug.Log(winner + " won!!!!");
+        }
     }
 }

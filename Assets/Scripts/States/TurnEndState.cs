@@ -17,8 +17,13 @@ public class TurnEndState : IGameState
 
     public void Process()
     {
-        boardState.SwitchPlayer();
-        stateMachine.SetCurrentState(IGameState.GameState.Turn_Start);
+        if (boardState.IsGameOver())
+        {
+            stateMachine.SetCurrentState(IGameState.GameState.Game_End);
+        } else { 
+            boardState.SwitchPlayer();
+            stateMachine.SetCurrentState(IGameState.GameState.Turn_Start);
+        }
     }
 
     public IGameState.GameState GetState()

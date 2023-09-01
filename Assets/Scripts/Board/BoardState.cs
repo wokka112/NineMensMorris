@@ -13,6 +13,7 @@ public class BoardState
     private LayerMask spaceLayer;
     private LayerMask pieceLayer;
     private Player currentPlayer;
+    private Player? winner;
     private Piece selectedPiece = null;
 
     public BoardState(Space[] allSpaces, GameObject blackPiecePrefab, GameObject whitePiecePrefab, LayerMask spaceLayer, LayerMask pieceLayer)
@@ -25,6 +26,7 @@ public class BoardState
         this.whitePieces = new List<Piece>();
         this.blackPieces = new List<Piece>();
         this.currentPlayer = Player.WHITE;
+        winner = null;
     }
 
     public void SetSelectedPiece(Piece piece)
@@ -87,25 +89,46 @@ public class BoardState
         GameObject.Destroy(piece.gameObject);
     }
 
-    public bool IsGameOver()
+    public bool IsOpponentAbleToMove()
     {
-        return whitePieces.Count <= 2 || blackPieces.Count <= 2;
+        Player opponent = currentPlayer == Player.WHITE ? Player.BLACK : Player.WHITE;
+        return IsPlayerAbleToMove(opponent);
     }
 
-    public Player GetWinner()
+    private bool IsPlayerAbleToMove(Player player)
     {
-        if (blackPieces.Count <= 2)
+        List<Piece> pieces = player == Player.WHITE ? whitePieces : blackPieces;
+
+        foreach (Piece piece in pieces)
         {
-            return Player.WHITE;
+            if (piece.GetSpace().HasEmptyNeighbour())
+            {
+                return true;
+            }
         }
-        else if (whitePieces.Count <= 2)
+
+        return false;
+    }
+
+    public bool IsGameOver()
+    {
+        if (!IsOpponentAbleToMove())
         {
-            return Player.BLACK;
-        } else
+            winner = currentPlayer;
+        } else if (whitePieces.Count <= 2)
         {
-            //TODO change to dif exception. Make a homemade exception. Or just log or something
-            throw new System.Exception("Nobody won yet!");
+            winner = Player.WHITE;
+        } else if (blackPieces.Count <= 2)
+        {
+            winner = Player.BLACK;
         }
+
+        return winner != null;
+    }
+
+    public Player? GetWinner()
+    {
+        return winner;
     }
 
     public void MakeAllEmptySpacesSelectable()

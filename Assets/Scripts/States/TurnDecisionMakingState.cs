@@ -22,7 +22,10 @@ public class TurnDecisionMakingState : IGameState
 
     public void Process()
     {
-        if (boardState.GetSelectedPiece().IsPartOfAMill())
+        if (boardState.IsGameOver())
+        {
+            stateMachine.SetCurrentState(IGameState.GameState.Game_End);
+        } else if (boardState.GetSelectedPiece().IsPartOfAMill())
         {
             stateMachine.SetCurrentState(IGameState.GameState.Remove_Piece);
         } else

@@ -18,7 +18,6 @@ public class InitState : IGameState
 
     public void Process()
     {
-        //Debug.Log("Processing init state");
         boardState.MakeAllEmptySpacesSelectable();
         stateMachine.SetCurrentState(IGameState.GameState.Board_Setup);
     }

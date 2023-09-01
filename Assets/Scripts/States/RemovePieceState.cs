@@ -36,13 +36,7 @@ public class RemovePieceState : IGameState
                     stateMachine.SetCurrentState(IGameState.GameState.Init);
                 } else
                 {
-                    if (boardState.IsGameOver())
-                    {
-                        stateMachine.SetCurrentState(IGameState.GameState.Game_End);
-                    } else
-                    {
-                        stateMachine.SetCurrentState(IGameState.GameState.Turn_End);
-                    }
+                    stateMachine.SetCurrentState(IGameState.GameState.Turn_End);
                 }
             }
         }
