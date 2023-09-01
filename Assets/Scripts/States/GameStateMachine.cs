@@ -18,7 +18,14 @@ public class GameStateMachine
 
     public void Process()
     {
-        currentState.Process();
+        try
+        {
+            currentState.Process();
+        } catch (UnityException e)
+        {
+            Debug.LogException(e);
+            SetCurrentState(IGameState.GameState.Error);
+        }
     }
 
     public void SetCurrentState(IGameState.GameState state)
@@ -28,7 +35,7 @@ public class GameStateMachine
         if (nextState == null)
         {
             Debug.LogError("No state exists for: " + state);
-            // Switch to error state
+            SetCurrentState(IGameState.GameState.Error);
         } else
         {
             SetCurrentState(nextState);
@@ -79,5 +86,8 @@ public class GameStateMachine
 
         IGameState gameEndState = new GameEndState(this, boardState);
         gameStates.Add(gameEndState.GetState(), gameEndState);
+
+        IGameState gameErrorState = new ErrorState(this, boardState);
+        gameStates.Add(gameErrorState.GetState(), gameErrorState);
     }
 }

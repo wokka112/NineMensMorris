@@ -27,8 +27,8 @@ public class BoardSetupState : IGameState
                 Piece piece = boardState.AddPieceToBoard(space);
                 if (piece == null)
                 {
+                    // TODO replace with exception? But that'd break the game flow, whereas we can just ignore it and continue trying this way
                     Debug.LogError("Something went wrong while creating the new piece!");
-
                 }
                 else
                 {
@@ -46,7 +46,7 @@ public class BoardSetupState : IGameState
                         if (piecesPlaced == noOfPiecesToPlace)
                         {
                             boardState.MakeAllSpacesUnselectable();
-                            stateMachine.SetCurrentState(IGameState.GameState.Turn_Setup);
+                            stateMachine.SetCurrentState(IGameState.GameState.Turn_Start);
                         }
                     }
 

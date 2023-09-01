@@ -20,11 +20,9 @@ public class TurnSetupState : IGameState
         if (boardState.GetCurrentPlayer() == Player.WHITE)
         { 
             boardState.MakeWhitePiecesThatCanMoveSelectable();
-            //TODO need to add in win condition here - if nothing can move, white loses
         } else
         {
             boardState.MakeBlackPiecesThatCanMoveSelectable();
-            // TODO need to add in win condition here - if nothing can move, black loses
         }
 
         stateMachine.SetCurrentState(IGameState.GameState.Turn_Pick_Piece);

@@ -42,7 +42,6 @@ public class RemovePieceState : IGameState
         }
     }
 
-    //TODO move into a state on it's own so it only happens once?
     private void HighlightRemovablePieces()
     {
         if (boardState.GetCurrentPlayer() == Player.WHITE)

@@ -281,9 +281,8 @@ public class BoardState
         Space space = piece.GetSpace();
         if (space == null)
         {
-            // TODO throw an exception maybe? Can catch, log and then switch to different state?
-            Debug.LogError("This piece has no space!");
-            return;
+            // Replace with an extended, custom exception.
+            throw new UnityException("Piece[" + piece + "] has no space associated with it!");
         }
 
         space.GetNeighbours().ForEach(delegate(Space space)
