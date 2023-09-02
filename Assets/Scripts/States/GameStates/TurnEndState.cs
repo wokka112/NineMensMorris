@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class TurnEndState : IGameState
 {
     private const IGameState.GameState state = IGameState.GameState.Turn_End;
@@ -26,8 +22,13 @@ public class TurnEndState : IGameState
         }
     }
 
-    public IGameState.GameState GetState()
+    public IGameState.GameState GetGameState()
     {
         return state;
+    }
+
+    public bool IsFinalState()
+    {
+        return false;
     }
 }

@@ -15,6 +15,7 @@ public class BoardState
     private Player currentPlayer;
     private Player? winner;
     private Piece selectedPiece = null;
+    private int blackPiecesPlaced;
 
     public BoardState(Space[] allSpaces, GameObject blackPiecePrefab, GameObject whitePiecePrefab, LayerMask spaceLayer, LayerMask pieceLayer)
     {
@@ -26,6 +27,7 @@ public class BoardState
         this.whitePieces = new List<Piece>();
         this.blackPieces = new List<Piece>();
         this.currentPlayer = Player.WHITE;
+        blackPiecesPlaced = 0;
         winner = null;
     }
 
@@ -44,7 +46,7 @@ public class BoardState
         return selectedPiece;
     }
 
-    public Piece AddPieceToBoard(Space space)
+    public Piece PlacePiece(Space space)
     {
         if (!space.IsEmpty())
         {
@@ -54,6 +56,11 @@ public class BoardState
         Piece piece = CreatePiece(space.GetPosition());
         space.SetPiece(piece);
         piece.SetSpace(space);
+
+        if (piece.GetColour() == Piece.Colour.BLACK)
+        {
+            IncrementBlackPiecesPlaced();
+        }
 
         return piece;
     }
@@ -305,5 +312,15 @@ public class BoardState
         {
             currentPlayer = Player.WHITE;
         }
+    }
+
+    public int GetBlackPiecesPlaced()
+    {
+        return blackPiecesPlaced;
+    }
+
+    private void IncrementBlackPiecesPlaced()
+    {
+        blackPiecesPlaced++;
     }
 }

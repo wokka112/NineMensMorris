@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class TurnSetupState : IGameState
 {
     private const IGameState.GameState state = IGameState.GameState.Turn_Setup;
@@ -28,8 +24,13 @@ public class TurnSetupState : IGameState
         stateMachine.SetCurrentState(IGameState.GameState.Turn_Pick_Piece);
     }
 
-    public IGameState.GameState GetState()
+    public IGameState.GameState GetGameState()
     {
         return state;
+    }
+
+    public bool IsFinalState()
+    {
+        return false;
     }
 }

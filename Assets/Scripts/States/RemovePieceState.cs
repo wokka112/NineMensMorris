@@ -2,22 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RemovePieceState : IGameState
+public class RemovePieceState : IState, ISetupState 
 {
     private const IGameState.GameState state = IGameState.GameState.Remove_Piece;
+    private const ISetupState.SetupState setupState = ISetupState.SetupState.Remove_Piece;
 
-    private GameStateMachine stateMachine;
+    private StateMachine stateMachine;
     private BoardState boardState;
+    private IState nextState;
 
-    public RemovePieceState(GameStateMachine stateMachine, BoardState boardState)
+    public RemovePieceState(StateMachine stateMachine, BoardState boardState, IState nextState)
     {
         this.stateMachine = stateMachine;
         this.boardState = boardState;
+        this.nextState = nextState;
     }
 
-    public IGameState.GameState GetState()
+    public IGameState.GameState GetGameState()
     {
         return state;
+    }
+
+    public ISetupState.SetupState GetSetupState()
+    {
+        return setupState;
     }
 
     public void Process()
@@ -30,14 +38,8 @@ public class RemovePieceState : IGameState
             {
                 boardState.RemovePiece(piece);
                 DeHighlightRemovablePieces();
-                if (stateMachine.GetPreviousState().GetState() == IGameState.GameState.Board_Setup)
-                {
-                    boardState.SwitchPlayer();
-                    stateMachine.SetCurrentState(IGameState.GameState.Init);
-                } else
-                {
-                    stateMachine.SetCurrentState(IGameState.GameState.Turn_End);
-                }
+
+                stateMachine.SetCurrentState(nextState);
             }
         }
     }
@@ -62,5 +64,10 @@ public class RemovePieceState : IGameState
         {
             boardState.MakeWhitePiecesUnselectable();
         }
+    }
+
+    public bool IsFinalState()
+    {
+        return false;
     }
 }

@@ -20,8 +20,13 @@ public class TurnStartState : IGameState
         stateMachine.SetCurrentState(IGameState.GameState.Turn_Setup);
     }
 
-    public IGameState.GameState GetState()
+    public IGameState.GameState GetGameState()
     {
         return state;
+    }
+
+    public bool IsFinalState()
+    {
+        return false;
     }
 }

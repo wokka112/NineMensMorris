@@ -34,8 +34,13 @@ public class TurnPickPieceState : IGameState
         }
     }
 
-    public IGameState.GameState GetState()
+    public IGameState.GameState GetGameState()
     {
         return state;
+    }
+
+    public bool IsFinalState()
+    {
+        return false;
     }
 }

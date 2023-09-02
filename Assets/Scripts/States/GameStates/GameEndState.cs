@@ -14,10 +14,14 @@ public class GameEndState : IGameState
         this.stateMachine = stateMachine;
         this.boardState = boardState;
     }
-
-    public IGameState.GameState GetState()
+    public IGameState.GameState GetGameState()
     {
         return state;
+    }
+
+    public bool IsFinalState()
+    {
+        return true;
     }
 
     public void Process()
