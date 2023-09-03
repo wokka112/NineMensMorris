@@ -35,11 +35,11 @@ public class GameStateMachine : StateMachine
         IGameState setupState = new BoardSetupState(this, boardState);
         gameStates.Add(setupState.GetGameState(), setupState);
 
+        IGameState gameStartState = new GameStartState(this, boardState);
+        gameStates.Add(gameStartState.GetGameState(), gameStartState);
+
         IGameState turnStartState = new TurnStartState(this, boardState);
         gameStates.Add(turnStartState.GetGameState(), turnStartState);
-
-        IGameState turnSetupState = new TurnSetupState(this, boardState);
-        gameStates.Add(turnSetupState.GetGameState(), turnSetupState);
 
         IGameState turnPickPieceState = new TurnPickPieceState(this, boardState);
         gameStates.Add(turnPickPieceState.GetGameState(), turnPickPieceState);
@@ -53,7 +53,7 @@ public class GameStateMachine : StateMachine
         IGameState turnEndState = new TurnEndState(this, boardState);
         gameStates.Add(turnEndState.GetGameState(), turnEndState);
 
-        IState removePieceState = new RemovePieceState(this, boardState, turnEndState);
+        IGameState removePieceState = new RemovePieceState(this, boardState, turnEndState);
         gameStates.Add(removePieceState.GetGameState(), removePieceState);
 
         IGameState gameEndState = new GameEndState(this, boardState);

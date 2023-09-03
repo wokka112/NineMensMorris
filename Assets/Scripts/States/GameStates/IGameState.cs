@@ -8,10 +8,9 @@ public interface IGameState : IState
 
     public enum GameState
     {
-        Init,
         Board_Setup,
+        Game_Start,
         Turn_Start,
-        Turn_Setup,
         Turn_Pick_Piece,
         Turn_Move_Piece,
         Turn_Decision_Making,

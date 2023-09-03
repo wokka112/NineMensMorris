@@ -34,7 +34,7 @@ public class GameEndState : IGameState
         Player? winner = boardState.GetWinner();
         if (winner == null)
         {
-            Debug.Log("Something went wrong. Return to menu");
+            throw new UnityException("Something went wrong! In game end state without a winner!!!");
         } else
         {
             Debug.Log(winner + " won!!!!");

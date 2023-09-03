@@ -12,6 +12,11 @@ public class BoardState
     private List<Piece> blackPieces;
     private LayerMask spaceLayer;
     private LayerMask pieceLayer;
+
+    //TODO should this move into a different class? Maybe BoardState should just concern itself with the state of the board - i.e. pieces and spaces.
+    // Maybe we could have a GameState which holds a BoardState separately? Then change the Game States to be Play States instead?
+    // Maybe we just call this Board instead of BoardState as well? Although it is the state of the board, so maybe this works as is...
+    // Move the player and winner logic into a GameState class which can track all of that and hold a Board or BoardState.
     private Player currentPlayer;
     private Player? winner;
     private Piece selectedPiece = null;

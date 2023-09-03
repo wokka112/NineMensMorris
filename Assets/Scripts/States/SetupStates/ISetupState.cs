@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface ISetupState : IState
 {
-    ISetupState.SetupState GetSetupState();
+    public ISetupState.SetupState GetSetupState();
 
     public enum SetupState
     {

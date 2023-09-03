@@ -17,7 +17,7 @@ public class BoardSetupState : IGameState
     {
         if (setupStateMachine.IsOnFinalState())
         {
-            stateMachine.SetCurrentState(IGameState.GameState.Turn_Start);
+            stateMachine.SetCurrentState(IGameState.GameState.Game_Start);
         }
 
         setupStateMachine.Process();

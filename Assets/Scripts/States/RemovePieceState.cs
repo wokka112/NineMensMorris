@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RemovePieceState : IState, ISetupState 
+public class RemovePieceState : IGameState, ISetupState 
 {
     private const IGameState.GameState state = IGameState.GameState.Remove_Piece;
     private const ISetupState.SetupState setupState = ISetupState.SetupState.Remove_Piece;

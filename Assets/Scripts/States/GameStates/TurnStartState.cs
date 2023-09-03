@@ -17,7 +17,16 @@ public class TurnStartState : IGameState
     {
         //TODO replace this with GUI stuff when we have one to say it's the player's turn.
         Debug.Log(boardState.GetCurrentPlayer() + "'s turn!");
-        stateMachine.SetCurrentState(IGameState.GameState.Turn_Setup);
+
+        if (boardState.GetCurrentPlayer() == Player.WHITE)
+        { 
+            boardState.MakeWhitePiecesThatCanMoveSelectable();
+        } else
+        {
+            boardState.MakeBlackPiecesThatCanMoveSelectable();
+        }
+
+        stateMachine.SetCurrentState(IGameState.GameState.Turn_Pick_Piece);
     }
 
     public IGameState.GameState GetGameState()
