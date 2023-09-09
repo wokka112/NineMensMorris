@@ -5,15 +5,13 @@ using UnityEngine;
 public class PlacePieceState : ISetupState
 {
     private const ISetupState.SetupState state = ISetupState.SetupState.Place_Piece;
-    private const int noOfPiecesToPlace = 9;
 
-    private readonly BoardState boardState;
+    private readonly GameController gameController;
     private SetupStateMachine stateMachine;
-    private int piecesPlaced = 0;
 
-    public PlacePieceState(SetupStateMachine stateMachine, BoardState boardState)
+    public PlacePieceState(SetupStateMachine stateMachine, GameController gameController)
     {
-        this.boardState = boardState;
+        this.gameController = gameController;
         this.stateMachine = stateMachine;
     }
 
@@ -31,10 +29,10 @@ public class PlacePieceState : ISetupState
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Space space = boardState.GetSpaceClicked(Input.mousePosition);
+            Space space = gameController.GetSpaceClicked(Input.mousePosition);
             if (space != null && space.IsSelectable())
             {
-                Piece piece = boardState.PlacePiece(space);
+                Piece piece = gameController.PlacePiece(space);
                 if (piece == null)
                 {
                     // TODO replace with exception? But that'd break the game flow, whereas we can just ignore it and continue trying this way
@@ -45,22 +43,12 @@ public class PlacePieceState : ISetupState
                     space.SetUnselectable();
                     if (piece.IsPartOfAMill())
                     {
-                        boardState.MakeAllSpacesUnselectable();
+                        gameController.MakeAllSpacesUnselectable();
                         stateMachine.SetCurrentState(ISetupState.SetupState.Remove_Piece);
-                        return;
-                    }
-
-                    if (boardState.GetCurrentPlayer() == Player.BLACK)
+                    } else
                     {
-                        piecesPlaced++;
-                        if (piecesPlaced == noOfPiecesToPlace)
-                        {
-                            boardState.MakeAllSpacesUnselectable();
-                            stateMachine.SetCurrentState(ISetupState.SetupState.Final);
-                        }
+                        stateMachine.SetCurrentState(ISetupState.SetupState.Check_Setup_End);
                     }
-
-                    boardState.SwitchPlayer();
                 }
             }
         }

@@ -4,11 +4,11 @@ public class FinalState : ISetupState
 {
     private const ISetupState.SetupState state = ISetupState.SetupState.Final;
 
-    private readonly BoardState boardState;
+    private readonly GameController gameController;
 
-    public FinalState(BoardState boardState)
+    public FinalState(GameController gameController)
     {
-        this.boardState = boardState;
+        this.gameController = gameController;
     }
 
     public ISetupState.SetupState GetSetupState()
@@ -23,6 +23,6 @@ public class FinalState : ISetupState
 
     public void Process()
     {
-        boardState.MakeAllSpacesUnselectable();
+        gameController.MakeAllSpacesUnselectable();
     }
 }

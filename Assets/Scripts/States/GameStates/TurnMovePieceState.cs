@@ -7,24 +7,24 @@ public class TurnMovePieceState : IGameState
     private const IGameState.GameState state = IGameState.GameState.Turn_Move_Piece;
 
     private GameStateMachine stateMachine;
-    private BoardState boardState;
+    private GameController gameController;
 
-    public TurnMovePieceState(GameStateMachine stateMachine, BoardState boardState)
+    public TurnMovePieceState(GameStateMachine stateMachine, GameController gameController)
     {
         this.stateMachine = stateMachine;
-        this.boardState = boardState;
+        this.gameController = gameController;
     }
 
     public void Process()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Space space = boardState.GetSpaceClicked(Input.mousePosition);
+            Space space = gameController.GetSpaceClicked(Input.mousePosition);
             if (space != null && space.IsSelectable())
             {
-                Piece piece = boardState.GetSelectedPiece();
+                Piece piece = gameController.GetSelectedPiece();
                 piece.Move(space);
-                boardState.MakeAllSpacesUnselectable();
+                gameController.MakeAllSpacesUnselectable();
                 stateMachine.SetCurrentState(IGameState.GameState.Turn_Decision_Making);
             } else
             {
@@ -32,9 +32,9 @@ public class TurnMovePieceState : IGameState
             }
         } else if (Input.GetMouseButtonDown(1))
         {
-            boardState.DeselectSelectedPiece();
-            boardState.MakeAllSpacesUnselectable();
-            stateMachine.SetCurrentState(IGameState.GameState.Turn_Setup);
+            gameController.DeselectSelectedPiece();
+            gameController.MakeAllSpacesUnselectable();
+            stateMachine.SetCurrentState(IGameState.GameState.Turn_Start);
         }
     }
 

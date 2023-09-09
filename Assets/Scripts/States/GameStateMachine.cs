@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class GameStateMachine : StateMachine
 {
-    private readonly BoardState boardState;
+    private readonly GameController gameController;
     private Dictionary<IGameState.GameState, IState> gameStates;
 
-    public GameStateMachine(BoardState boardState)
+    public GameStateMachine(GameController gameController)
     {
-        this.boardState = boardState;
+        this.gameController = gameController;
         SetupStates();
         SetCurrentState(IGameState.GameState.Board_Setup);
     }
@@ -32,31 +32,31 @@ public class GameStateMachine : StateMachine
     {
         gameStates = new Dictionary<IGameState.GameState, IState>();
 
-        IGameState setupState = new BoardSetupState(this, boardState);
+        IGameState setupState = new BoardSetupState(this, gameController);
         gameStates.Add(setupState.GetGameState(), setupState);
 
-        IGameState gameStartState = new GameStartState(this, boardState);
+        IGameState gameStartState = new GameStartState(this, gameController);
         gameStates.Add(gameStartState.GetGameState(), gameStartState);
 
-        IGameState turnStartState = new TurnStartState(this, boardState);
+        IGameState turnStartState = new TurnStartState(this, gameController);
         gameStates.Add(turnStartState.GetGameState(), turnStartState);
 
-        IGameState turnPickPieceState = new TurnPickPieceState(this, boardState);
+        IGameState turnPickPieceState = new TurnPickPieceState(this, gameController);
         gameStates.Add(turnPickPieceState.GetGameState(), turnPickPieceState);
 
-        IGameState turnMovePieceState = new TurnMovePieceState(this, boardState);
+        IGameState turnMovePieceState = new TurnMovePieceState(this, gameController);
         gameStates.Add(turnMovePieceState.GetGameState(), turnMovePieceState);
 
-        IGameState turnDecisionMakingState = new TurnDecisionMakingState(this, boardState);
+        IGameState turnDecisionMakingState = new TurnDecisionMakingState(this, gameController);
         gameStates.Add(turnDecisionMakingState.GetGameState(), turnDecisionMakingState);
 
-        IGameState turnEndState = new TurnEndState(this, boardState);
+        IGameState turnEndState = new TurnEndState(this, gameController);
         gameStates.Add(turnEndState.GetGameState(), turnEndState);
 
-        IGameState removePieceState = new RemovePieceState(this, boardState, turnEndState);
+        IGameState removePieceState = new RemovePieceState(this, gameController, turnEndState);
         gameStates.Add(removePieceState.GetGameState(), removePieceState);
 
-        IGameState gameEndState = new GameEndState(this, boardState);
+        IGameState gameEndState = new GameEndState(gameController);
         gameStates.Add(gameEndState.GetGameState(), gameEndState);
     }
 }

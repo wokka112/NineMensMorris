@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class GameHandler : MonoBehaviour
 {
-    private int blackPiecesLeft = 0;
-    private int whitePiecesLeft = 0;
-
     [SerializeField]
     private LayerMask spaceLayer;
     [SerializeField]
@@ -16,7 +13,7 @@ public class GameHandler : MonoBehaviour
     [SerializeField]
     private GameObject whitePiece;
 
-    private BoardState boardState;
+    private GameController gameController;
     private GameStateMachine stateMachine;
 
     // Start is called before the first frame update
@@ -29,8 +26,8 @@ public class GameHandler : MonoBehaviour
         for (int i = 0; i < spaceObjects.Length; i++) {
             spaces[i] = spaceObjects[i].GetComponent<Space>();
         }
-        boardState = new BoardState(spaces, blackPiece, whitePiece, spaceLayer, pieceLayer);
-        stateMachine = new GameStateMachine(boardState);
+        gameController = new GameController(spaces, blackPiece, whitePiece, spaceLayer, pieceLayer);
+        stateMachine = new GameStateMachine(gameController);
     }
 
     // Update is called once per frame

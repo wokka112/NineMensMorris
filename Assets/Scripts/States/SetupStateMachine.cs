@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class SetupStateMachine : StateMachine
 {
-    private readonly BoardState boardState;
+    private readonly GameController gameController;
     private Dictionary<ISetupState.SetupState, IState> setupStates;
 
-    public SetupStateMachine(BoardState boardState)
+    public SetupStateMachine(GameController gameController)
     {
-        this.boardState = boardState;
+        this.gameController = gameController;
         SetupStates();
         SetCurrentState(ISetupState.SetupState.Highlight_Empty_Spaces);
     }
@@ -37,19 +37,19 @@ public class SetupStateMachine : StateMachine
     {
         setupStates = new Dictionary<ISetupState.SetupState, IState>();
 
-        ISetupState highlightEmptySpacesState = new HighlightEmptySpacesState(this, boardState);
+        ISetupState highlightEmptySpacesState = new HighlightEmptySpacesState(this, gameController);
         setupStates.Add(highlightEmptySpacesState.GetSetupState(), highlightEmptySpacesState); 
 
-        ISetupState placePieceState = new PlacePieceState(this, boardState);
+        ISetupState placePieceState = new PlacePieceState(this, gameController);
         setupStates.Add(placePieceState.GetSetupState(), placePieceState); 
 
-        ISetupState removePieceState = new RemovePieceState(this, boardState, highlightEmptySpacesState);
+        ISetupState removePieceState = new RemovePieceState(this, gameController, highlightEmptySpacesState);
         setupStates.Add(removePieceState.GetSetupState(), removePieceState);
 
-        ISetupState checkSetupEndState = new CheckSetupEndState(this, boardState);
+        ISetupState checkSetupEndState = new CheckSetupEndState(this, gameController);
         setupStates.Add(checkSetupEndState.GetSetupState(), checkSetupEndState);
 
-        ISetupState finalState = new FinalState(boardState);
+        ISetupState finalState = new FinalState(gameController);
         setupStates.Add(finalState.GetSetupState(), finalState); 
     }
 }

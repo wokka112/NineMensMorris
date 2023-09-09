@@ -36,7 +36,7 @@ public class Line : MonoBehaviour
             return false;
         }
 
-        Piece.Colour colour = firstSpace.GetPiece().GetColour();
+        Colour colour = firstSpace.GetPiece().GetColour();
 
         foreach (Space space in spaces)
         {

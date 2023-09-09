@@ -5,19 +5,19 @@ public class TurnPickPieceState : IGameState
     private const IGameState.GameState state = IGameState.GameState.Turn_Pick_Piece;
 
     private GameStateMachine stateMachine;
-    private BoardState boardState;
+    private GameController gameController;
 
-    public TurnPickPieceState(GameStateMachine stateMachine, BoardState boardState)
+    public TurnPickPieceState(GameStateMachine stateMachine, GameController gameController)
     {
         this.stateMachine = stateMachine;
-        this.boardState = boardState;
+        this.gameController = gameController;
     }
 
     public void Process()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Piece piece = boardState.GetPieceClicked(Input.mousePosition);
+            Piece piece = gameController.GetPieceClicked(Input.mousePosition);
             if (piece != null && piece.IsSelectable())
             {
                 if(!piece.CanMove())
@@ -26,9 +26,10 @@ public class TurnPickPieceState : IGameState
                     return;
                 }
 
-                boardState.SetSelectedPiece(piece);
-                boardState.MakeCurrentPlayersPiecesUnselectable();
-                boardState.MakeMovableSpacesSelectable(piece);
+                gameController.SelectPiece(piece);
+                gameController.MakeCurrentPlayersPiecesUnselectable();
+                gameController.MakeSpacesPieceCanMoveToSelectable(piece);
+
                 stateMachine.SetCurrentState(IGameState.GameState.Turn_Move_Piece);
             }
         }

@@ -10,70 +10,34 @@ public class BoardState
     private Space[] allSpaces;
     private List<Piece> whitePieces;
     private List<Piece> blackPieces;
-    private LayerMask spaceLayer;
-    private LayerMask pieceLayer;
 
-    //TODO should this move into a different class? Maybe BoardState should just concern itself with the state of the board - i.e. pieces and spaces.
-    // Maybe we could have a GameState which holds a BoardState separately? Then change the Game States to be Play States instead?
-    // Maybe we just call this Board instead of BoardState as well? Although it is the state of the board, so maybe this works as is...
-    // Move the player and winner logic into a GameState class which can track all of that and hold a Board or BoardState.
-    private Player currentPlayer;
-    private Player? winner;
-    private Piece selectedPiece = null;
-    private int blackPiecesPlaced;
-
-    public BoardState(Space[] allSpaces, GameObject blackPiecePrefab, GameObject whitePiecePrefab, LayerMask spaceLayer, LayerMask pieceLayer)
+    public BoardState(Space[] allSpaces, GameObject blackPiecePrefab, GameObject whitePiecePrefab)
     {
         this.allSpaces = allSpaces;
         this.blackPiecePrefab = blackPiecePrefab;
         this.whitePiecePrefab = whitePiecePrefab;
-        this.spaceLayer = spaceLayer;
-        this.pieceLayer = pieceLayer;
         this.whitePieces = new List<Piece>();
         this.blackPieces = new List<Piece>();
-        this.currentPlayer = Player.WHITE;
-        blackPiecesPlaced = 0;
-        winner = null;
     }
 
-    public void SetSelectedPiece(Piece piece)
-    {
-        this.selectedPiece = piece;
-    }
-
-    public void DeselectSelectedPiece()
-    {
-        this.selectedPiece = null;
-    }
-
-    public Piece GetSelectedPiece()
-    {
-        return selectedPiece;
-    }
-
-    public Piece PlacePiece(Space space)
+    public Piece PlacePiece(Space space, Colour colour)
     {
         if (!space.IsEmpty())
         {
             return null;
         }
 
-        Piece piece = CreatePiece(space.GetPosition());
+        Piece piece = CreatePiece(space.GetPosition(), colour);
         space.SetPiece(piece);
         piece.SetSpace(space);
-
-        if (piece.GetColour() == Piece.Colour.BLACK)
-        {
-            IncrementBlackPiecesPlaced();
-        }
 
         return piece;
     }
 
-    private Piece CreatePiece(Vector3 position)
+    private Piece CreatePiece(Vector3 position, Colour colour)
     {
         Piece piece;
-        if (currentPlayer == Player.BLACK)
+        if (colour == Colour.BLACK)
         {
             piece = GameObject.Instantiate(blackPiecePrefab, position, Quaternion.identity).GetComponent<Piece>();
             blackPieces.Add(piece);
@@ -90,57 +54,16 @@ public class BoardState
     public void RemovePiece(Piece piece)
     {
         piece.GetSpace().RemovePiece();
-        if (piece.GetColour() == Piece.Colour.WHITE)
+        if (piece.GetColour() == Colour.WHITE)
         {
             whitePieces.Remove(piece);
-        } else
+        }
+        else
         {
             blackPieces.Remove(piece);
         }
 
         GameObject.Destroy(piece.gameObject);
-    }
-
-    public bool IsOpponentAbleToMove()
-    {
-        Player opponent = currentPlayer == Player.WHITE ? Player.BLACK : Player.WHITE;
-        return IsPlayerAbleToMove(opponent);
-    }
-
-    private bool IsPlayerAbleToMove(Player player)
-    {
-        List<Piece> pieces = player == Player.WHITE ? whitePieces : blackPieces;
-
-        foreach (Piece piece in pieces)
-        {
-            if (piece.GetSpace().HasEmptyNeighbour())
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public bool IsGameOver()
-    {
-        if (!IsOpponentAbleToMove())
-        {
-            winner = currentPlayer;
-        } else if (whitePieces.Count <= 2)
-        {
-            winner = Player.WHITE;
-        } else if (blackPieces.Count <= 2)
-        {
-            winner = Player.BLACK;
-        }
-
-        return winner != null;
-    }
-
-    public Player? GetWinner()
-    {
-        return winner;
     }
 
     public void MakeAllEmptySpacesSelectable()
@@ -162,50 +85,46 @@ public class BoardState
         }
     }
 
-    public void MakeWhitePiecesSelectable()
+    public void MakePiecesSelectable(Colour colour)
     {
-        MakePiecesSelectable(whitePieces);
-    }
+        List<Piece> pieces = getPieces(colour);
 
-    public void MakeBlackPiecesSelectable()
-    {
-        MakePiecesSelectable(blackPieces);
-    }
-
-    public void MakeWhitePiecesUnselectable()
-    {
-        MakePiecesUnselectable(whitePieces);
-    }
-
-    public void MakeBlackPiecesUnselectable()
-    {
-        MakePiecesUnselectable(blackPieces);
-    }
-
-    public void MakeCurrentPlayersPiecesUnselectable()
-    {
-        if (currentPlayer == Player.WHITE)
+        foreach (Piece piece in pieces)
         {
-            MakeWhitePiecesUnselectable();
-        } else
-        {
-            MakeBlackPiecesUnselectable();
+            piece.SetSelectable();
         }
     }
 
-    public void MakeWhitePiecesThatCanMoveSelectable()
+    public void MakePiecesUnselectable(Colour colour)
     {
-        MakePiecesThatCanMoveSelectable(whitePieces);
+        List<Piece> pieces = getPieces(colour);
+
+        foreach (Piece piece in pieces)
+        {
+            piece.SetUnselectable();
+        }
     }
 
-    public void MakeBlackPiecesThatCanMoveSelectable()
+    public bool IsThereAMovablePiece(Colour colour)
     {
-        MakePiecesThatCanMoveSelectable(blackPieces);
+        List<Piece> pieces = colour == Colour.WHITE ? whitePieces : blackPieces;
+
+        foreach (Piece piece in pieces)
+        {
+            if (piece.GetSpace().HasEmptyNeighbour())
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    private void MakePiecesThatCanMoveSelectable(List<Piece> pieces)
+    public void MakePiecesThatCanMoveSelectable(Colour colour)
     {
-        foreach(Piece piece in pieces)
+        List<Piece> pieces = getPieces(colour);
+
+        foreach (Piece piece in pieces)
         {
             if (piece.GetSpace().HasEmptyNeighbour())
             {
@@ -214,34 +133,26 @@ public class BoardState
         }
     }
 
-    private void MakePiecesSelectable(List<Piece> pieces)
+    public void MakeSpacesPieceCanMoveToSelectable(Piece piece)
     {
-        foreach (Piece piece in pieces)
+        Space space = piece.GetSpace();
+        if (space == null)
         {
-            piece.SetSelectable();
+            // Replace with an extended, custom exception.
+            throw new UnityException("Piece[" + piece + "] has no space associated with it!");
         }
-    }
 
-    private void MakePiecesUnselectable(List<Piece> pieces)
-    {
-        foreach(Piece piece in pieces)
+        space.GetNeighbours().ForEach(delegate (Space space)
         {
-            piece.SetUnselectable();
-        }
+            space.SetSelectable();
+        });
     }
 
-    public void MakeWhiteRemovablePiecesSelectable()
-    {
-        MakeRemovablePiecesSelectable(whitePieces);
-    }
 
-    public void MakeBlackRemovablePiecesSelectable()
+    public void MakeRemovablePiecesSelectable(Colour colour)
     {
-        MakeRemovablePiecesSelectable(blackPieces);
-    }
+        List<Piece> pieces = getPieces(colour);
 
-    private void MakeRemovablePiecesSelectable(List<Piece> pieces)
-    {
         bool allInMills = true;
 
         foreach (Piece piece in pieces)
@@ -255,77 +166,17 @@ public class BoardState
 
         if (allInMills)
         {
-            MakePiecesSelectable(pieces);
+            MakePiecesSelectable(colour);
         }
     }
 
-    public Space GetSpaceClicked(Vector3 mousePosition)
+    public int getPiecesLeft(Colour colour)
     {
-        Space space = null;
-        RaycastHit hitData;
-
-        Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-        if (Physics.Raycast(ray, out hitData, 1000, spaceLayer))
-        {
-            space = hitData.transform.GetComponent<Space>();
-        }
-
-        return space;
+        return getPieces(colour).Count;
     }
 
-    public Piece GetPieceClicked(Vector3 mousePosition)
+    private List<Piece> getPieces(Colour colour)
     {
-        Piece piece = null;
-        RaycastHit hitData;
-
-        Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-        if (Physics.Raycast(ray, out hitData, 1000, pieceLayer))
-        {
-            Debug.Log("Ray hit something: " + hitData);
-            piece = hitData.transform.GetComponent<Piece>();
-        }
-
-        return piece;
-    }
-
-    public void MakeMovableSpacesSelectable(Piece piece)
-    {
-        Space space = piece.GetSpace();
-        if (space == null)
-        {
-            // Replace with an extended, custom exception.
-            throw new UnityException("Piece[" + piece + "] has no space associated with it!");
-        }
-
-        space.GetNeighbours().ForEach(delegate(Space space)
-        {
-            space.SetSelectable();
-        });
-    }
-
-    public Player GetCurrentPlayer()
-    {
-        return currentPlayer;
-    }
-
-    public void SwitchPlayer()
-    {
-        if (currentPlayer == Player.WHITE)
-        {
-            currentPlayer = Player.BLACK;
-        } else
-        {
-            currentPlayer = Player.WHITE;
-        }
-    }
-
-    public int GetBlackPiecesPlaced()
-    {
-        return blackPiecesPlaced;
-    }
-
-    private void IncrementBlackPiecesPlaced()
-    {
-        blackPiecesPlaced++;
+        return colour == Colour.WHITE ? whitePieces : blackPieces;
     }
 }

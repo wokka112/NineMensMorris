@@ -1,18 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class HighlightEmptySpacesState : ISetupState
 {
     private static ISetupState.SetupState state = ISetupState.SetupState.Highlight_Empty_Spaces;
 
     private SetupStateMachine stateMachine;
-    private BoardState boardState;
+    private GameController gameController;
 
-    public HighlightEmptySpacesState(SetupStateMachine stateMachine, BoardState boardState)
+    public HighlightEmptySpacesState(SetupStateMachine stateMachine, GameController gameController)
     {
         this.stateMachine = stateMachine;
-        this.boardState = boardState;
+        this.gameController = gameController;
     }
 
     public ISetupState.SetupState GetSetupState()
@@ -27,7 +23,7 @@ public class HighlightEmptySpacesState : ISetupState
 
     public void Process()
     {
-        boardState.MakeAllEmptySpacesSelectable();
+        gameController.MakeAllEmptySpacesSelectable();
         stateMachine.SetCurrentState(ISetupState.SetupState.Place_Piece);
     }
 }

@@ -1,18 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class TurnDecisionMakingState : IGameState
 {
     private const IGameState.GameState state = IGameState.GameState.Turn_Decision_Making;
 
     private GameStateMachine stateMachine;
-    private BoardState boardState;
+    private GameController gameController;
 
-    public TurnDecisionMakingState(GameStateMachine stateMachine, BoardState boardState)
+    public TurnDecisionMakingState(GameStateMachine stateMachine, GameController gameController)
     {
         this.stateMachine = stateMachine;
-        this.boardState = boardState;
+        this.gameController = gameController;
     }
 
     public IGameState.GameState GetGameState()
@@ -27,16 +23,16 @@ public class TurnDecisionMakingState : IGameState
 
     public void Process()
     {
-        if (boardState.IsGameOver())
+        if (gameController.IsGameOver())
         {
             stateMachine.SetCurrentState(IGameState.GameState.Game_End);
-        } else if (boardState.GetSelectedPiece().IsPartOfAMill())
+        } else if (gameController.GetSelectedPiece().IsPartOfAMill())
         {
             stateMachine.SetCurrentState(IGameState.GameState.Remove_Piece);
         } else
         {
             stateMachine.SetCurrentState(IGameState.GameState.Turn_End);
         }
-        boardState.DeselectSelectedPiece();
+        gameController.DeselectSelectedPiece();
     }
 }

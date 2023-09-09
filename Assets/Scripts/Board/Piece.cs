@@ -13,7 +13,7 @@ public class Piece : MonoBehaviour
 
     public void Start()
     {
-        this.componentRenderer = GetComponent<Renderer>();
+        componentRenderer = GetComponent<Renderer>();
         originalColour = componentRenderer.material.color;
     }
 
@@ -79,12 +79,6 @@ public class Piece : MonoBehaviour
         }
 
         return false;
-    }
-
-    public enum Colour
-    {
-        WHITE,
-        BLACK
     }
 
     public override string ToString()

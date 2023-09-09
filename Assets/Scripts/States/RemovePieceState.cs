@@ -8,13 +8,13 @@ public class RemovePieceState : IGameState, ISetupState
     private const ISetupState.SetupState setupState = ISetupState.SetupState.Remove_Piece;
 
     private StateMachine stateMachine;
-    private BoardState boardState;
+    private GameController gameController;
     private IState nextState;
 
-    public RemovePieceState(StateMachine stateMachine, BoardState boardState, IState nextState)
+    public RemovePieceState(StateMachine stateMachine, GameController gameController, IState nextState)
     {
         this.stateMachine = stateMachine;
-        this.boardState = boardState;
+        this.gameController = gameController;
         this.nextState = nextState;
     }
 
@@ -33,10 +33,10 @@ public class RemovePieceState : IGameState, ISetupState
         HighlightRemovablePieces();
         if (Input.GetMouseButtonDown(0))
         {
-            Piece piece = boardState.GetPieceClicked(Input.mousePosition);
+            Piece piece = gameController.GetPieceClicked(Input.mousePosition);
             if (piece != null && piece.IsSelectable())
             {
-                boardState.RemovePiece(piece);
+                gameController.RemovePiece(piece);
                 DeHighlightRemovablePieces();
 
                 stateMachine.SetCurrentState(nextState);
@@ -46,24 +46,12 @@ public class RemovePieceState : IGameState, ISetupState
 
     private void HighlightRemovablePieces()
     {
-        if (boardState.GetCurrentPlayer() == Player.WHITE)
-        {
-            boardState.MakeBlackRemovablePiecesSelectable();
-        } else
-        {
-            boardState.MakeWhiteRemovablePiecesSelectable();
-        }
+        gameController.MakeOpponentsRemovablePiecesSelectable();
     }
 
     private void DeHighlightRemovablePieces()
     {
-        if (boardState.GetCurrentPlayer() == Player.WHITE)
-        {
-            boardState.MakeBlackPiecesUnselectable();
-        } else
-        {
-            boardState.MakeWhitePiecesUnselectable();
-        }
+        gameController.MakeOpponentsPiecesUnselectable();
     }
 
     public bool IsFinalState()

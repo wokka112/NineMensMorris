@@ -6,13 +6,13 @@ public class GameStartState : IGameState
 {
     private const IGameState.GameState state = IGameState.GameState.Game_Start;
 
-    private readonly BoardState boardState;
+    private readonly GameController gameController;
     private readonly GameStateMachine gameStateMachine;
 
-    public GameStartState(GameStateMachine gameStateMachine, BoardState boardState)
+    public GameStartState(GameStateMachine gameStateMachine, GameController gameController)
     {
         this.gameStateMachine = gameStateMachine;
-        this.boardState = boardState;
+        this.gameController = gameController;
     }
 
     public IGameState.GameState GetGameState()
@@ -27,7 +27,7 @@ public class GameStartState : IGameState
 
     public void Process()
     {
-        if (boardState.IsGameOver())
+        if (gameController.IsGameOver())
         {
             gameStateMachine.SetCurrentState(IGameState.GameState.Game_End);
         } else

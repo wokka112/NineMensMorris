@@ -3,21 +3,21 @@ public class TurnEndState : IGameState
     private const IGameState.GameState state = IGameState.GameState.Turn_End;
 
     private GameStateMachine stateMachine;
-    private BoardState boardState;
+    private GameController gameController;
 
-    public TurnEndState(GameStateMachine stateMachine, BoardState boardState)
+    public TurnEndState(GameStateMachine stateMachine, GameController gameController)
     {
         this.stateMachine = stateMachine;
-        this.boardState = boardState;
+        this.gameController = gameController;
     }
 
     public void Process()
     {
-        if (boardState.IsGameOver())
+        if (gameController.IsGameOver())
         {
             stateMachine.SetCurrentState(IGameState.GameState.Game_End);
         } else { 
-            boardState.SwitchPlayer();
+            gameController.SwitchPlayer();
             stateMachine.SetCurrentState(IGameState.GameState.Turn_Start);
         }
     }

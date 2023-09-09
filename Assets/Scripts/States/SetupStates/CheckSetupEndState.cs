@@ -1,19 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class CheckSetupEndState : ISetupState
 {
     private const ISetupState.SetupState state = ISetupState.SetupState.Check_Setup_End;
+    //TODO move into game controller???
     private const int noOfPiecesToPlace = 9;
 
-    private readonly BoardState boardState;
+    private readonly GameController gameController;
     private readonly SetupStateMachine stateMachine;
 
-    public CheckSetupEndState(SetupStateMachine stateMachine, BoardState boardState)
+    public CheckSetupEndState(SetupStateMachine stateMachine, GameController gameController)
     {
         this.stateMachine = stateMachine;
-        this.boardState = boardState;
+        this.gameController = gameController;
     }
 
     public ISetupState.SetupState GetSetupState()
@@ -28,7 +25,7 @@ public class CheckSetupEndState : ISetupState
 
     public void Process()
     {
-        if (boardState.GetBlackPiecesPlaced() >= noOfPiecesToPlace)
+        if (gameController.GetBlackPiecesPlaced() >= noOfPiecesToPlace)
         {
             stateMachine.SetCurrentState(ISetupState.SetupState.Final);
         } else
@@ -36,6 +33,6 @@ public class CheckSetupEndState : ISetupState
             stateMachine.SetCurrentState(ISetupState.SetupState.Highlight_Empty_Spaces);
         }
 
-        boardState.SwitchPlayer();
+        gameController.SwitchPlayer();
     }
 }
