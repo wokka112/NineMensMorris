@@ -1,14 +1,6 @@
-public class FinalState : ISetupState
+public class FinalSetupState : ISetupState
 {
     private const ISetupState.SetupState state = ISetupState.SetupState.Final;
-
-    private readonly GameController gameController;
-
-    public FinalState(GameController gameController)
-    {
-        this.gameController = gameController;
-    }
-
     public ISetupState.SetupState GetSetupState()
     {
         return state;
@@ -21,6 +13,5 @@ public class FinalState : ISetupState
 
     public void Process()
     {
-        gameController.MakeAllSpacesUnselectable();
     }
 }

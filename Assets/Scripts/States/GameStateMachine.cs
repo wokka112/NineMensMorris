@@ -26,6 +26,11 @@ public class GameStateMachine : StateMachine
         }
     }
 
+    public bool IsOnFinalState()
+    {
+        return currentState.IsFinalState();
+    }
+
     private void SetupStates()
     {
         gameStates = new Dictionary<IGameState.GameState, IState>();
@@ -54,7 +59,10 @@ public class GameStateMachine : StateMachine
         IGameState removePieceState = new RemovePieceState(this, gameController, turnEndState);
         gameStates.Add(removePieceState.GetGameState(), removePieceState);
 
-        IGameState gameEndState = new GameEndState(gameController);
+        IGameState gameEndState = new GameEndState(this, gameController);
         gameStates.Add(gameEndState.GetGameState(), gameEndState);
+
+        IGameState finalGameState = new FinalGameState();
+        gameStates.Add(finalGameState.GetGameState(), finalGameState);
     }
 }

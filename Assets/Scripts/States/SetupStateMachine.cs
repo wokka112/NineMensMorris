@@ -42,13 +42,16 @@ public class SetupStateMachine : StateMachine
         ISetupState placePieceState = new PlacePieceState(this, gameController);
         setupStates.Add(placePieceState.GetSetupState(), placePieceState); 
 
-        ISetupState removePieceState = new RemovePieceState(this, gameController, highlightEmptySpacesState);
-        setupStates.Add(removePieceState.GetSetupState(), removePieceState);
-
         ISetupState checkSetupEndState = new CheckSetupEndState(this, gameController);
         setupStates.Add(checkSetupEndState.GetSetupState(), checkSetupEndState);
 
-        ISetupState finalState = new FinalState(gameController);
+        ISetupState removePieceState = new RemovePieceState(this, gameController, checkSetupEndState);
+        setupStates.Add(removePieceState.GetSetupState(), removePieceState);
+
+        ISetupState postSetupState = new PostSetupState(this, gameController);
+        setupStates.Add(postSetupState.GetSetupState(), postSetupState);
+
+        ISetupState finalState = new FinalSetupState();
         setupStates.Add(finalState.GetSetupState(), finalState); 
     }
 }

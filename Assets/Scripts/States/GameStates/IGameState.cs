@@ -13,6 +13,7 @@ public interface IGameState : IState
         Turn_End,
         Remove_Piece,
         Game_End,
+        Final,
         Error
     }
 }

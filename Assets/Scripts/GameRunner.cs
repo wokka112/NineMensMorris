@@ -31,6 +31,13 @@ public class GameRunner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        stateMachine.Process();
+        if (stateMachine.IsOnFinalState())
+        {
+            // TODO should we display a replay menu here? Or what? Or should that be dealt with in the state machine?
+        }
+        else
+        {
+            stateMachine.Process();
+        }
     }
 }

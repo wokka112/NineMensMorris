@@ -8,6 +8,7 @@ public interface ISetupState : IState
         Place_Piece,
         Remove_Piece,
         Check_Setup_End,
+        Post_Setup,
         Final
     }
 }

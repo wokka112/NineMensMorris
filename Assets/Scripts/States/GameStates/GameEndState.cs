@@ -5,10 +5,12 @@ public class GameEndState : IGameState
     private const IGameState.GameState state = IGameState.GameState.Game_End;
 
     private readonly GameController gameController;
+    private readonly GameStateMachine stateMachine;
 
-    public GameEndState(GameController boardState)
+    public GameEndState(GameStateMachine stateMachine, GameController gameController)
     {
-        gameController = boardState;
+        this.gameController = gameController;
+        this.stateMachine = stateMachine;
     }
 
     public IGameState.GameState GetGameState()
@@ -18,12 +20,13 @@ public class GameEndState : IGameState
 
     public bool IsFinalState()
     {
-        return true;
+        return false;
     }
 
     public void Process()
     {
         AnnounceWinner();
+        stateMachine.SetCurrentState(IGameState.GameState.Final);
     }
 
     private void AnnounceWinner()

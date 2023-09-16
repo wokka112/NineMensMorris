@@ -25,7 +25,7 @@ public class CheckSetupEndState : ISetupState
     {
         if (gameController.HaveAllPiecesBeenPlaced())
         {
-            stateMachine.SetCurrentState(ISetupState.SetupState.Final);
+            stateMachine.SetCurrentState(ISetupState.SetupState.Post_Setup);
         } else
         {
             stateMachine.SetCurrentState(ISetupState.SetupState.Highlight_Empty_Spaces);

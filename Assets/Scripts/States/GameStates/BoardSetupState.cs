@@ -26,8 +26,11 @@ public class BoardSetupState : IGameState
                 gameStateMachine.SetCurrentState(IGameState.GameState.Game_Start);
             }
         }
+        else
+        {
 
-        setupStateMachine.Process();
+            setupStateMachine.Process();
+        }
     }
 
     public IGameState.GameState GetGameState()
