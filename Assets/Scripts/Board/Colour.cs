@@ -1,5 +1,5 @@
 /**
- * Represents the colour of a playing piece and the colour of a player
+ * Represents the colour of a playing piece or the colour of a player
  */
 public enum Colour
 {

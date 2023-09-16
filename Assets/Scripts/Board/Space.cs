@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +5,7 @@ public class Space : MonoBehaviour
 {
     [SerializeField]
     private List<Space> neighbours;
+    // The lines this space is a part of
     private List<Line> lines;
 
     private Transform spaceObject;
@@ -16,9 +16,9 @@ public class Space : MonoBehaviour
 
     private void Awake()
     {
-        this.spaceObject = GetComponent<Transform>();
-        this.componentRenderer = GetComponent<Renderer>();
-        this.lines = new List<Line>();
+        spaceObject = GetComponent<Transform>();
+        componentRenderer = GetComponent<Renderer>();
+        lines = new List<Line>();
     }
 
     public List<Space> GetNeighbours()
@@ -73,7 +73,7 @@ public class Space : MonoBehaviour
 
     public void RemovePiece()
     {
-        this.piece = null;
+        piece = null;
     }
 
     public Piece GetPiece()
@@ -96,6 +96,7 @@ public class Space : MonoBehaviour
 
     private void UpdateColour()
     {
+        //TODO replace this with better rendering
         componentRenderer.material.color = isSelectable ? Color.green : Color.black;
     }
 

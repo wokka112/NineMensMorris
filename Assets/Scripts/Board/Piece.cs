@@ -59,6 +59,7 @@ public class Piece : MonoBehaviour
 
     private void UpdateColour()
     {
+        //TODO replace this with better rendering
         componentRenderer.material.color = isSelectable ? Color.green : originalColour;
     }
 

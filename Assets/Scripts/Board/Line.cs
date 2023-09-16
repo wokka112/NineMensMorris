@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Line : MonoBehaviour
@@ -38,8 +36,9 @@ public class Line : MonoBehaviour
 
         Colour colour = firstSpace.GetPiece().GetColour();
 
-        foreach (Space space in spaces)
+        for(int i = 1; i< spaces.Length; i++)
         {
+            Space space = spaces[i];
             if (space.IsEmpty())
             {
                 return false;

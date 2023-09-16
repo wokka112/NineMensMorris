@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,17 +6,17 @@ public class BoardState
     private GameObject blackPiecePrefab;
     private GameObject whitePiecePrefab;
 
-    private Space[] allSpaces;
+    private Space[] spaces;
     private List<Piece> whitePieces;
     private List<Piece> blackPieces;
 
-    public BoardState(Space[] allSpaces, GameObject blackPiecePrefab, GameObject whitePiecePrefab)
+    public BoardState(Space[] spaces, GameObject blackPiecePrefab, GameObject whitePiecePrefab)
     {
-        this.allSpaces = allSpaces;
+        this.spaces = spaces;
         this.blackPiecePrefab = blackPiecePrefab;
         this.whitePiecePrefab = whitePiecePrefab;
-        this.whitePieces = new List<Piece>();
-        this.blackPieces = new List<Piece>();
+        whitePieces = new List<Piece>();
+        blackPieces = new List<Piece>();
     }
 
     public Piece PlacePiece(Space space, Colour colour)
@@ -68,7 +67,7 @@ public class BoardState
 
     public void MakeAllEmptySpacesSelectable()
     {
-        foreach (Space space in allSpaces)
+        foreach (Space space in spaces)
         {
             if (space.IsEmpty())
             {
@@ -79,7 +78,7 @@ public class BoardState
 
     public void MakeAllSpacesUnselectable()
     {
-        foreach (Space space in allSpaces)
+        foreach (Space space in spaces)
         {
             space.SetUnselectable();
         }
@@ -139,6 +138,7 @@ public class BoardState
         if (space == null)
         {
             // Replace with an extended, custom exception.
+            Debug.LogError("Pieces[" + piece + "] has no space associated with it!");
             throw new UnityException("Piece[" + piece + "] has no space associated with it!");
         }
 
