@@ -29,6 +29,7 @@ public class GameController
     {
         return currentPlayer;
     }
+
     public void SwitchPlayer()
     {
         if (currentPlayer == Colour.WHITE)
