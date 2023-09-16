@@ -1,8 +1,6 @@
 public class CheckSetupEndState : ISetupState
 {
     private const ISetupState.SetupState state = ISetupState.SetupState.Check_Setup_End;
-    //TODO move into game controller???
-    private const int noOfPiecesToPlace = 9;
 
     private readonly GameController gameController;
     private readonly SetupStateMachine stateMachine;
@@ -25,7 +23,7 @@ public class CheckSetupEndState : ISetupState
 
     public void Process()
     {
-        if (gameController.GetBlackPiecesPlaced() >= noOfPiecesToPlace)
+        if (gameController.HaveAllPiecesBeenPlaced())
         {
             stateMachine.SetCurrentState(ISetupState.SetupState.Final);
         } else

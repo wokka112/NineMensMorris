@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class GameStartState : IGameState
 {
     private const IGameState.GameState state = IGameState.GameState.Game_Start;
@@ -27,12 +23,6 @@ public class GameStartState : IGameState
 
     public void Process()
     {
-        if (gameController.IsGameOver())
-        {
-            gameStateMachine.SetCurrentState(IGameState.GameState.Game_End);
-        } else
-        {
-            gameStateMachine.SetCurrentState(IGameState.GameState.Turn_Start);
-        }
+        gameStateMachine.SetCurrentState(IGameState.GameState.Turn_Start);
     }
 }

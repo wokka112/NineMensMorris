@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,7 +15,6 @@ public class GameStateMachine : StateMachine
 
     public void SetCurrentState(IGameState.GameState state)
     {
-        Debug.Log("Setting current state to: " + state);
         gameStates.TryGetValue(state, out IState nextState);
         if (nextState == null)
         {

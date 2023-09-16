@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,10 +15,10 @@ public class SetupStateMachine : StateMachine
 
     public void SetCurrentState(ISetupState.SetupState state)
     {
-        Debug.Log("Setting current state to: " + state);
         setupStates.TryGetValue(state, out IState nextState);
         if (nextState == null)
         {
+            Debug.LogError("No state exists for: " + state);
             throw new UnityException("No state exists for setup state: " + state);
         }
         else

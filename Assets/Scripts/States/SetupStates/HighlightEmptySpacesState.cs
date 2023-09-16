@@ -1,9 +1,9 @@
 public class HighlightEmptySpacesState : ISetupState
 {
-    private static ISetupState.SetupState state = ISetupState.SetupState.Highlight_Empty_Spaces;
+    private const ISetupState.SetupState state = ISetupState.SetupState.Highlight_Empty_Spaces;
 
-    private SetupStateMachine stateMachine;
-    private GameController gameController;
+    private readonly SetupStateMachine stateMachine;
+    private readonly GameController gameController;
 
     public HighlightEmptySpacesState(SetupStateMachine stateMachine, GameController gameController)
     {

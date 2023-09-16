@@ -4,12 +4,13 @@ public class GameEndState : IGameState
 {
     private const IGameState.GameState state = IGameState.GameState.Game_End;
 
-    private GameController gameController;
+    private readonly GameController gameController;
 
     public GameEndState(GameController boardState)
     {
         gameController = boardState;
     }
+
     public IGameState.GameState GetGameState()
     {
         return state;
@@ -30,6 +31,7 @@ public class GameEndState : IGameState
         Colour? winner = gameController.GetWinner();
         if (winner == null)
         {
+            Debug.LogError("Something went wrong! In game end state without a winner!!");
             throw new UnityException("Something went wrong! In game end state without a winner!!!");
         } else
         {

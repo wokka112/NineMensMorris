@@ -1,9 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameController
 {
+    private const int piecesToPlace = 9;
+
     private LayerMask spaceLayer;
     private LayerMask pieceLayer;
 
@@ -54,9 +54,10 @@ public class GameController
     {
         return selectedPiece;
     }
-    public int GetBlackPiecesPlaced()
+
+    public bool HaveAllPiecesBeenPlaced()
     {
-        return blackPiecesPlaced;
+        return blackPiecesPlaced >= piecesToPlace;
     }
 
     private void IncrementBlackPiecesPlaced()

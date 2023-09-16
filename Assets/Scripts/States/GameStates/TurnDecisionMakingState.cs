@@ -2,8 +2,8 @@ public class TurnDecisionMakingState : IGameState
 {
     private const IGameState.GameState state = IGameState.GameState.Turn_Decision_Making;
 
-    private GameStateMachine stateMachine;
-    private GameController gameController;
+    private readonly GameStateMachine stateMachine;
+    private readonly GameController gameController;
 
     public TurnDecisionMakingState(GameStateMachine stateMachine, GameController gameController)
     {

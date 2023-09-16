@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class FinalState : ISetupState
 {
     private const ISetupState.SetupState state = ISetupState.SetupState.Final;

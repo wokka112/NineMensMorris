@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlacePieceState : ISetupState
@@ -7,7 +5,7 @@ public class PlacePieceState : ISetupState
     private const ISetupState.SetupState state = ISetupState.SetupState.Place_Piece;
 
     private readonly GameController gameController;
-    private SetupStateMachine stateMachine;
+    private readonly SetupStateMachine stateMachine;
 
     public PlacePieceState(SetupStateMachine stateMachine, GameController gameController)
     {

@@ -2,8 +2,8 @@ public class TurnEndState : IGameState
 {
     private const IGameState.GameState state = IGameState.GameState.Turn_End;
 
-    private GameStateMachine stateMachine;
-    private GameController gameController;
+    private readonly GameStateMachine stateMachine;
+    private readonly GameController gameController;
 
     public TurnEndState(GameStateMachine stateMachine, GameController gameController)
     {

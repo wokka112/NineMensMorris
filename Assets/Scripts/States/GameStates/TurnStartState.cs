@@ -4,8 +4,8 @@ public class TurnStartState : IGameState
 {
     private const IGameState.GameState state = IGameState.GameState.Turn_Start;
 
-    private GameStateMachine stateMachine;
-    private GameController gameController;
+    private readonly GameStateMachine stateMachine;
+    private readonly GameController gameController;
 
     public TurnStartState(GameStateMachine stateMachine, GameController gameController)
     {

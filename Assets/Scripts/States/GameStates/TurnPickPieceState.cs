@@ -4,8 +4,8 @@ public class TurnPickPieceState : IGameState
 {
     private const IGameState.GameState state = IGameState.GameState.Turn_Pick_Piece;
 
-    private GameStateMachine stateMachine;
-    private GameController gameController;
+    private readonly GameStateMachine stateMachine;
+    private readonly GameController gameController;
 
     public TurnPickPieceState(GameStateMachine stateMachine, GameController gameController)
     {

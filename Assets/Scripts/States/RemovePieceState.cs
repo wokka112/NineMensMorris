@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RemovePieceState : IGameState, ISetupState 
@@ -7,9 +5,9 @@ public class RemovePieceState : IGameState, ISetupState
     private const IGameState.GameState state = IGameState.GameState.Remove_Piece;
     private const ISetupState.SetupState setupState = ISetupState.SetupState.Remove_Piece;
 
-    private StateMachine stateMachine;
-    private GameController gameController;
-    private IState nextState;
+    private readonly StateMachine stateMachine;
+    private readonly GameController gameController;
+    private readonly IState nextState;
 
     public RemovePieceState(StateMachine stateMachine, GameController gameController, IState nextState)
     {

@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class GameHandler : MonoBehaviour
+public class GameRunner : MonoBehaviour
 {
     [SerializeField]
     private LayerMask spaceLayer;
