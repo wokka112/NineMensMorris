@@ -10,6 +10,8 @@ public class GameRunner : MonoBehaviour
     private GameObject blackPiece;
     [SerializeField]
     private GameObject whitePiece;
+    [SerializeField]
+    private UiHandler uiHandler;
 
     private GameController gameController;
     private GameStateMachine stateMachine;
