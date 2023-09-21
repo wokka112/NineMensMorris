@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections.Generic;
+
 public abstract class StateMachine 
 {
     protected IState currentState;
@@ -17,6 +19,6 @@ public abstract class StateMachine
 
     public void SetCurrentState(IState nextState)
     {
-        this.currentState = nextState;
+        currentState = nextState;
     }
 }

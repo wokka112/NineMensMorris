@@ -4,6 +4,7 @@ using UnityEngine;
 public class SetupStateMachine : StateMachine
 {
     private readonly GameController gameController;
+    private List<ISetupStateListener> listeners;
     private Dictionary<ISetupState.SetupState, IState> setupStates;
 
     public SetupStateMachine(GameController gameController)
@@ -23,7 +24,16 @@ public class SetupStateMachine : StateMachine
         }
         else
         {
+            OnStateChange(state);
             SetCurrentState(nextState);
+        }
+    }
+
+    private void OnStateChange(ISetupState.SetupState state)
+    {
+        foreach (ISetupStateListener listener in listeners)
+        {
+            listener.OnStateChange(state);
         }
     }
 

@@ -4,7 +4,8 @@ using UnityEngine;
 public class GameStateMachine : StateMachine
 {
     private readonly GameController gameController;
-    private Dictionary<IGameState.GameState, IState> gameStates;
+    private List<IGameStateListener> listeners;
+    private Dictionary<IGameState.GameState, IGameState> gameStates;
 
     public GameStateMachine(GameController gameController)
     {
@@ -15,13 +16,15 @@ public class GameStateMachine : StateMachine
 
     public void SetCurrentState(IGameState.GameState state)
     {
-        gameStates.TryGetValue(state, out IState nextState);
+        gameStates.TryGetValue(state, out IGameState nextState);
         if (nextState == null)
         {
+            OnStateChange(IGameState.GameState.Error);
             Debug.LogError("No state exists for: " + state);
             SetCurrentState(IGameState.GameState.Error);
         } else
         {
+            OnStateChange(state);
             SetCurrentState(nextState);
         }
     }
@@ -31,9 +34,17 @@ public class GameStateMachine : StateMachine
         return currentState.IsFinalState();
     }
 
+    private void OnStateChange(IGameState.GameState state)
+    {
+        foreach (IGameStateListener listener in listeners)
+        {
+            listener.OnStateChange(state);
+        }
+    }
+
     private void SetupStates()
     {
-        gameStates = new Dictionary<IGameState.GameState, IState>();
+        gameStates = new Dictionary<IGameState.GameState, IGameState>();
 
         IGameState setupState = new BoardSetupState(this, gameController);
         gameStates.Add(setupState.GetGameState(), setupState);
