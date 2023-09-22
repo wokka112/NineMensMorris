@@ -1,6 +1,6 @@
-public class BoardSetupState : IGameState
+public class BoardSetupState : IState
 {
-    private const IGameState.GameState state = IGameState.GameState.Board_Setup;
+    private const IState.State state = IState.State.Board_Setup;
 
     private readonly GameStateMachine gameStateMachine;
     private readonly SetupStateMachine setupStateMachine;
@@ -19,11 +19,11 @@ public class BoardSetupState : IGameState
         {
             if (gameController.IsGameOver())
             {
-                gameStateMachine.SetCurrentState(IGameState.GameState.Game_End);
+                gameStateMachine.SetCurrentState(IState.State.Game_End);
             }
             else
             {
-                gameStateMachine.SetCurrentState(IGameState.GameState.Game_Start);
+                gameStateMachine.SetCurrentState(IState.State.Game_Start);
             }
         }
         else
@@ -33,7 +33,7 @@ public class BoardSetupState : IGameState
         }
     }
 
-    public IGameState.GameState GetGameState()
+    public IState.State GetState()
     {
         return state;
     }

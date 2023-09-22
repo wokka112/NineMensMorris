@@ -1,21 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class PostSetupState : ISetupState
+public class PostState : IState
 {
-    private const ISetupState.SetupState state = ISetupState.SetupState.Post_Setup;
+    private const IState.State state = IState.State.Setup_Post_Setup;
 
     private readonly GameController gameController;
-    private readonly SetupStateMachine stateMachine;
+    private readonly StateMachine stateMachine;
 
-    public PostSetupState(SetupStateMachine stateMachine, GameController gameController)
+    public PostState(StateMachine stateMachine, GameController gameController)
     {
         this.stateMachine = stateMachine;
         this.gameController = gameController;
     }
 
-    public ISetupState.SetupState GetSetupState()
+    public IState.State GetState()
     {
         return state;
     }
@@ -28,6 +24,6 @@ public class PostSetupState : ISetupState
     public void Process()
     {
         gameController.MakeAllSpacesUnselectable();
-        stateMachine.SetCurrentState(ISetupState.SetupState.Final);
+        stateMachine.SetCurrentState(IState.State.Final);
     }
 }

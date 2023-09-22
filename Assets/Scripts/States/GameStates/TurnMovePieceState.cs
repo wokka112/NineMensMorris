@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class TurnMovePieceState : IGameState
+public class TurnMovePieceState : IState
 {
-    private const IGameState.GameState state = IGameState.GameState.Turn_Move_Piece;
+    private const IState.State state = IState.State.Turn_Move_Piece;
 
     private GameStateMachine stateMachine;
     private GameController gameController;
@@ -23,7 +23,7 @@ public class TurnMovePieceState : IGameState
                 Piece piece = gameController.GetSelectedPiece();
                 piece.Move(space);
                 gameController.MakeAllSpacesUnselectable();
-                stateMachine.SetCurrentState(IGameState.GameState.Turn_Decision_Making);
+                stateMachine.SetCurrentState(IState.State.Turn_Decision_Making);
             } else
             {
                 Debug.Log("Please click a selectable space");
@@ -32,11 +32,11 @@ public class TurnMovePieceState : IGameState
         {
             gameController.DeselectSelectedPiece();
             gameController.MakeAllSpacesUnselectable();
-            stateMachine.SetCurrentState(IGameState.GameState.Turn_Start);
+            stateMachine.SetCurrentState(IState.State.Turn_Start);
         }
     }
 
-    public IGameState.GameState GetGameState()
+    public IState.State GetState()
     {
         return state;
     }

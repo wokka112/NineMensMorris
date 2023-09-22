@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class TurnStartState : IGameState
+public class TurnStartState : IState
 {
-    private const IGameState.GameState state = IGameState.GameState.Turn_Start;
+    private const IState.State state = IState.State.Turn_Start;
 
     private readonly GameStateMachine stateMachine;
     private readonly GameController gameController;
@@ -19,10 +19,10 @@ public class TurnStartState : IGameState
         Debug.Log(gameController.GetCurrentPlayer() + "'s turn!");
 
         gameController.MakeCurrentPlayersMovablePiecesSelectable();
-        stateMachine.SetCurrentState(IGameState.GameState.Turn_Pick_Piece);
+        stateMachine.SetCurrentState(IState.State.Turn_Pick_Piece);
     }
 
-    public IGameState.GameState GetGameState()
+    public IState.State GetState()
     {
         return state;
     }

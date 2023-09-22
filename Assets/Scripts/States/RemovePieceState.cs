@@ -1,29 +1,23 @@
 using UnityEngine;
 
-public class RemovePieceState : IGameState, ISetupState 
+public class RemovePieceState : IState  
 {
-    private const IGameState.GameState state = IGameState.GameState.Remove_Piece;
-    private const ISetupState.SetupState setupState = ISetupState.SetupState.Remove_Piece;
+    private const IState.State state = IState.State.Remove_Piece;
 
     private readonly StateMachine stateMachine;
     private readonly GameController gameController;
-    private readonly IState nextState;
+    private readonly IState.State nextState;
 
-    public RemovePieceState(StateMachine stateMachine, GameController gameController, IState nextState)
+    public RemovePieceState(StateMachine stateMachine, GameController gameController, IState.State nextState)
     {
         this.stateMachine = stateMachine;
         this.gameController = gameController;
         this.nextState = nextState;
     }
 
-    public IGameState.GameState GetGameState()
+    public IState.State GetState()
     {
         return state;
-    }
-
-    public ISetupState.SetupState GetSetupState()
-    {
-        return setupState;
     }
 
     public void Process()

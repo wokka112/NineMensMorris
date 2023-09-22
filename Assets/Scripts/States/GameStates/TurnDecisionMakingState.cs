@@ -1,6 +1,6 @@
-public class TurnDecisionMakingState : IGameState
+public class TurnDecisionMakingState : IState
 {
-    private const IGameState.GameState state = IGameState.GameState.Turn_Decision_Making;
+    private const IState.State state = IState.State.Turn_Decision_Making;
 
     private readonly GameStateMachine stateMachine;
     private readonly GameController gameController;
@@ -11,7 +11,7 @@ public class TurnDecisionMakingState : IGameState
         this.gameController = gameController;
     }
 
-    public IGameState.GameState GetGameState()
+    public IState.State GetState()
     {
         return state;
     }
@@ -25,13 +25,13 @@ public class TurnDecisionMakingState : IGameState
     {
         if (gameController.IsGameOver())
         {
-            stateMachine.SetCurrentState(IGameState.GameState.Game_End);
+            stateMachine.SetCurrentState(IState.State.Game_End);
         } else if (gameController.GetSelectedPiece().IsPartOfAMill())
         {
-            stateMachine.SetCurrentState(IGameState.GameState.Remove_Piece);
+            stateMachine.SetCurrentState(IState.State.Remove_Piece);
         } else
         {
-            stateMachine.SetCurrentState(IGameState.GameState.Turn_End);
+            stateMachine.SetCurrentState(IState.State.Turn_End);
         }
         gameController.DeselectSelectedPiece();
     }

@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class TurnPickPieceState : IGameState
+public class TurnPickPieceState : IState
 {
-    private const IGameState.GameState state = IGameState.GameState.Turn_Pick_Piece;
+    private const IState.State state = IState.State.Turn_Pick_Piece;
 
     private readonly GameStateMachine stateMachine;
     private readonly GameController gameController;
@@ -30,12 +30,12 @@ public class TurnPickPieceState : IGameState
                 gameController.MakeCurrentPlayersPiecesUnselectable();
                 gameController.MakeSpacesPieceCanMoveToSelectable(piece);
 
-                stateMachine.SetCurrentState(IGameState.GameState.Turn_Move_Piece);
+                stateMachine.SetCurrentState(IState.State.Turn_Move_Piece);
             }
         }
     }
 
-    public IGameState.GameState GetGameState()
+    public IState.State GetState()
     {
         return state;
     }

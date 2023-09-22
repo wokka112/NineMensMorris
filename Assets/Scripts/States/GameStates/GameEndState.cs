@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class GameEndState : IGameState
+public class GameEndState : IState
 {
-    private const IGameState.GameState state = IGameState.GameState.Game_End;
+    private const IState.State state = IState.State.Game_End;
 
     private readonly GameController gameController;
     private readonly GameStateMachine stateMachine;
@@ -13,7 +13,7 @@ public class GameEndState : IGameState
         this.stateMachine = stateMachine;
     }
 
-    public IGameState.GameState GetGameState()
+    public IState.State GetState()
     {
         return state;
     }
@@ -26,7 +26,7 @@ public class GameEndState : IGameState
     public void Process()
     {
         AnnounceWinner();
-        stateMachine.SetCurrentState(IGameState.GameState.Final);
+        stateMachine.SetCurrentState(IState.State.Final);
     }
 
     private void AnnounceWinner()

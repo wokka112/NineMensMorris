@@ -1,6 +1,6 @@
-public class TurnEndState : IGameState
+public class TurnEndState : IState
 {
-    private const IGameState.GameState state = IGameState.GameState.Turn_End;
+    private const IState.State state = IState.State.Turn_End;
 
     private readonly GameStateMachine stateMachine;
     private readonly GameController gameController;
@@ -15,14 +15,14 @@ public class TurnEndState : IGameState
     {
         if (gameController.IsGameOver())
         {
-            stateMachine.SetCurrentState(IGameState.GameState.Game_End);
+            stateMachine.SetCurrentState(IState.State.Game_End);
         } else { 
             gameController.SwitchPlayer();
-            stateMachine.SetCurrentState(IGameState.GameState.Turn_Start);
+            stateMachine.SetCurrentState(IState.State.Turn_Start);
         }
     }
 
-    public IGameState.GameState GetGameState()
+    public IState.State GetState()
     {
         return state;
     }

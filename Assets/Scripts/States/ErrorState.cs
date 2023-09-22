@@ -1,11 +1,11 @@
 using UnityEngine;
 
 //TODO should probably make this more robust. Can I pass the error to it and then do something with it?
-public class ErrorState : IGameState 
+public class ErrorState : IState 
 {
-    private const IGameState.GameState state = IGameState.GameState.Error;
+    private const IState.State state = IState.State.Error;
 
-    public IGameState.GameState GetGameState()
+    public IState.State GetState()
     {
         return state;
     }

@@ -1,17 +1,17 @@
-public class CheckSetupEndState : ISetupState
+public class CheckSetupEndState : IState
 {
-    private const ISetupState.SetupState state = ISetupState.SetupState.Check_Setup_End;
+    private const IState.State state = IState.State.Setup_Check_Setup_End;
 
     private readonly GameController gameController;
-    private readonly SetupStateMachine stateMachine;
+    private readonly StateMachine stateMachine;
 
-    public CheckSetupEndState(SetupStateMachine stateMachine, GameController gameController)
+    public CheckSetupEndState(StateMachine stateMachine, GameController gameController)
     {
         this.stateMachine = stateMachine;
         this.gameController = gameController;
     }
 
-    public ISetupState.SetupState GetSetupState()
+    public IState.State GetState()
     {
         return state;
     }
@@ -25,10 +25,10 @@ public class CheckSetupEndState : ISetupState
     {
         if (gameController.HaveAllPiecesBeenPlaced())
         {
-            stateMachine.SetCurrentState(ISetupState.SetupState.Post_Setup);
+            stateMachine.SetCurrentState(IState.State.Setup_Post_Setup);
         } else
         {
-            stateMachine.SetCurrentState(ISetupState.SetupState.Highlight_Empty_Spaces);
+            stateMachine.SetCurrentState(IState.State.Setup_Highlight_Empty_Spaces);
         }
 
         gameController.SwitchPlayer();

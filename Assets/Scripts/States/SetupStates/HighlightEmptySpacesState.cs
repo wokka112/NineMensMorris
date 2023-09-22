@@ -1,17 +1,17 @@
-public class HighlightEmptySpacesState : ISetupState
+public class HighlightEmptySpacesState : IState
 {
-    private const ISetupState.SetupState state = ISetupState.SetupState.Highlight_Empty_Spaces;
+    private const IState.State state = IState.State.Setup_Highlight_Empty_Spaces;
 
-    private readonly SetupStateMachine stateMachine;
+    private readonly StateMachine stateMachine;
     private readonly GameController gameController;
 
-    public HighlightEmptySpacesState(SetupStateMachine stateMachine, GameController gameController)
+    public HighlightEmptySpacesState(StateMachine stateMachine, GameController gameController)
     {
         this.stateMachine = stateMachine;
         this.gameController = gameController;
     }
 
-    public ISetupState.SetupState GetSetupState()
+    public IState.State GetState()
     {
         return state;
     }
@@ -24,6 +24,6 @@ public class HighlightEmptySpacesState : ISetupState
     public void Process()
     {
         gameController.MakeAllEmptySpacesSelectable();
-        stateMachine.SetCurrentState(ISetupState.SetupState.Place_Piece);
+        stateMachine.SetCurrentState(IState.State.Setup_Place_Piece);
     }
 }

@@ -1,19 +1,19 @@
 using UnityEngine;
 
-public class PlacePieceState : ISetupState
+public class PlacePieceState : IState
 {
-    private const ISetupState.SetupState state = ISetupState.SetupState.Place_Piece;
+    private const IState.State state = IState.State.Setup_Place_Piece;
 
     private readonly GameController gameController;
-    private readonly SetupStateMachine stateMachine;
+    private readonly StateMachine stateMachine;
 
-    public PlacePieceState(SetupStateMachine stateMachine, GameController gameController)
+    public PlacePieceState(StateMachine stateMachine, GameController gameController)
     {
         this.gameController = gameController;
         this.stateMachine = stateMachine;
     }
 
-    public ISetupState.SetupState GetSetupState()
+    public IState.State GetState()
     {
         return state;
     }
@@ -42,10 +42,10 @@ public class PlacePieceState : ISetupState
                     if (piece.IsPartOfAMill())
                     {
                         gameController.MakeAllSpacesUnselectable();
-                        stateMachine.SetCurrentState(ISetupState.SetupState.Remove_Piece);
+                        stateMachine.SetCurrentState(IState.State.Remove_Piece);
                     } else
                     {
-                        stateMachine.SetCurrentState(ISetupState.SetupState.Check_Setup_End);
+                        stateMachine.SetCurrentState(IState.State.Setup_Check_Setup_End);
                     }
                 }
             }
