@@ -6,9 +6,11 @@ public abstract class StateMachine
     protected IState currentState;
     protected Dictionary<IState.State, IState> states;
     protected List<IStateListener> listeners;
+    protected GameController gameController;
 
-    public StateMachine()
+    public StateMachine(GameController gameController)
     {
+        this.gameController = gameController;
         states = new Dictionary<IState.State, IState>();
         listeners = new List<IStateListener>();
     }
@@ -16,6 +18,11 @@ public abstract class StateMachine
     public void AddListener(IStateListener listener)
     {
         listeners.Add(listener);
+    }
+
+    public List<IStateListener> getListeners()
+    {
+        return listeners;
     }
 
     public void Process()

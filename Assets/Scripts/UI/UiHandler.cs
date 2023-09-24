@@ -31,10 +31,10 @@ public class UiHandler : MonoBehaviour
         DisplayText(promptText);
     }
 
-    public void DisplayPromptText(float displayTimeInMs)
+    public void DisplayPromptText(float displayTimeInSeconds)
     {
         DisplayText(promptText);
-        StartCoroutine(WaitAndHide(promptText, displayTimeInMs));
+        StartCoroutine(WaitAndHide(promptText, displayTimeInSeconds));
     }
 
     public void HidePromptText()
@@ -47,10 +47,10 @@ public class UiHandler : MonoBehaviour
         DisplayText(turnText);
     }
 
-    public void DisplayTurnText(float displayTimeInMs)
+    public void DisplayTurnText(float displayTimeInSeconds)
     {
         DisplayText(turnText);
-        StartCoroutine(WaitAndHide(turnText, displayTimeInMs));
+        StartCoroutine(WaitAndHide(turnText, displayTimeInSeconds));
     }
 
     public void HideTurnText()
@@ -63,10 +63,10 @@ public class UiHandler : MonoBehaviour
         DisplayText(importantText);
     }
 
-    public void DisplayImportantText(float displayTimeInMs)
+    public void DisplayImportantText(float displayTimeInSeconds)
     {
         DisplayText(importantText);
-        StartCoroutine(WaitAndHide(importantText, displayTimeInMs));
+        StartCoroutine(WaitAndHide(importantText, displayTimeInSeconds));
     }
 
     public void HideImportantText()
@@ -84,9 +84,9 @@ public class UiHandler : MonoBehaviour
         text.gameObject.SetActive(false);
     }
 
-    private IEnumerator WaitAndHide(TextMeshProUGUI text, float displayTimeInMs)
+    private IEnumerator WaitAndHide(TextMeshProUGUI text, float displayTimeInSeconds)
     {
-        yield return new WaitForSeconds(displayTimeInMs);
+        yield return new WaitForSeconds(displayTimeInSeconds);
         HideText(text);
     }
 }

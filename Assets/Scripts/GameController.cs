@@ -1,8 +1,10 @@
 using UnityEngine;
 
-public class GameController
+public class GameController : IStateListener
 {
     private const int piecesToPlace = 9;
+
+    private readonly UiHandler uiHandler;
 
     private LayerMask spaceLayer;
     private LayerMask pieceLayer;
@@ -13,10 +15,11 @@ public class GameController
     private Piece selectedPiece;
     private int blackPiecesPlaced;
 
-    public GameController(Space[] allSpaces, GameObject blackPiecePrefab, GameObject whitePiecePrefab, LayerMask spaceLayer, LayerMask pieceLayer)
+    public GameController(Space[] allSpaces, GameObject blackPiecePrefab, GameObject whitePiecePrefab, LayerMask spaceLayer, LayerMask pieceLayer, UiHandler uiHandler)
     {
         this.spaceLayer = spaceLayer;
         this.pieceLayer = pieceLayer;
+        this.uiHandler = uiHandler;
 
         boardState = new BoardState(allSpaces, blackPiecePrefab, whitePiecePrefab);
         currentPlayer = Colour.WHITE;
@@ -171,5 +174,61 @@ public class GameController
         }
 
         return piece;
+    }
+
+    public void OnStateChange(IState.State state)
+    {
+        switch (state)
+        {
+            case (IState.State.Board_Setup):
+                uiHandler.SetImportantText("BOARD SETUP");
+                uiHandler.DisplayImportantText(2f);
+                break;
+            case (IState.State.Setup_Place_Piece):
+                uiHandler.SetImportantText(currentPlayer.ToString() + "'s turn!");
+                uiHandler.DisplayImportantText(2f);
+                uiHandler.SetPromptText("Place piece");
+                uiHandler.DisplayPromptText();
+                break;
+            case (IState.State.Setup_Check_Setup_End):
+                uiHandler.HidePromptText();
+                break;
+            case (IState.State.Game_Start):
+                uiHandler.SetImportantText("GAME START");
+                uiHandler.DisplayImportantText(2f);
+                break;
+            case (IState.State.Turn_Start):
+                uiHandler.SetImportantText(currentPlayer.ToString() + "'s turn!");
+                break;
+            case (IState.State.Turn_Pick_Piece):
+                uiHandler.SetPromptText("Select piece to move");
+                uiHandler.DisplayPromptText();
+                break;
+            case (IState.State.Turn_Move_Piece):
+                uiHandler.SetPromptText("Select where to move");
+                uiHandler.DisplayPromptText();
+                break;
+            case (IState.State.Turn_End):
+                uiHandler.HidePromptText();
+                break;
+            case (IState.State.Game_End):
+                uiHandler.SetImportantText(winner + " won!");
+                uiHandler.HidePromptText();
+                uiHandler.DisplayImportantText();
+                break;
+            case (IState.State.Remove_Piece):
+                uiHandler.SetPromptText("Select a piece to remove");
+                uiHandler.DisplayPromptText();
+                break;
+            case (IState.State.Error):
+                //TODO what to do here???
+                // How do we deal with it?
+                uiHandler.SetImportantText("An error occurred!");
+                uiHandler.DisplayImportantText();
+                uiHandler.HidePromptText();
+                break;
+            default:
+                break;
+        }
     }
 }

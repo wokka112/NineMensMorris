@@ -1,10 +1,7 @@
 public class GameStateMachine : StateMachine
 {
-    private readonly GameController gameController;
-
-    public GameStateMachine(GameController gameController)
+    public GameStateMachine(GameController gameController) : base(gameController)
     {
-        this.gameController = gameController;
         SetupStates();
         SetCurrentState(IState.State.Board_Setup);
     }

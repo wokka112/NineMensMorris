@@ -10,7 +10,12 @@ public class BoardSetupState : IState
     {
         this.gameStateMachine = gameStateMachine;
         this.gameController = gameController;
+
         setupStateMachine = new SetupStateMachine(gameController);
+        gameStateMachine.getListeners().ForEach(delegate (IStateListener l)
+        {
+            setupStateMachine.AddListener(l);
+        });
     }
 
     public void Process()
@@ -28,7 +33,6 @@ public class BoardSetupState : IState
         }
         else
         {
-
             setupStateMachine.Process();
         }
     }
