@@ -1,5 +1,4 @@
-using UnityEngine;
-public class BoardSetupState : MonoBehaviour, IState
+public class BoardSetupState : IState
 {
     private const IState.State state = IState.State.Board_Setup;
 
@@ -7,11 +6,11 @@ public class BoardSetupState : MonoBehaviour, IState
     private readonly SetupStateMachine setupStateMachine;
     private readonly GameController gameController;
 
-    public BoardSetupState(GameStateMachine gameStateMachine, GameController gameController)
+    public BoardSetupState(GameStateMachine gameStateMachine, SetupStateMachine setupStateMachine, GameController gameController)
     {
         this.gameStateMachine = gameStateMachine;
+        this.setupStateMachine = setupStateMachine;
         this.gameController = gameController;
-        setupStateMachine = gameStateMachine.GetSetupStateMachine();
     }
 
     public void Process()

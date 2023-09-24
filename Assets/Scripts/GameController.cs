@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class GameController : IStateListener
 {
     private const int piecesToPlace = 9;
@@ -178,7 +176,6 @@ public class GameController : IStateListener
 
     public void OnStateChange(IState.State state)
     {
-        Debug.Log("hit state change");
         switch (state)
         {
             case (IState.State.Board_Setup):
@@ -200,6 +197,7 @@ public class GameController : IStateListener
                 break;
             case (IState.State.Turn_Start):
                 uiHandler.SetImportantText(currentPlayer.ToString() + "'s turn!");
+                uiHandler.DisplayImportantText(2f);
                 break;
             case (IState.State.Turn_Pick_Piece):
                 uiHandler.SetPromptText("Select piece to move");

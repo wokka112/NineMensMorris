@@ -19,7 +19,7 @@ public class GameStateMachine : StateMachine
 
     private void SetupStates()
     {
-        IState setupState = new BoardSetupState(this, gameController);
+        IState setupState = new BoardSetupState(this, setupStateMachine, gameController);
         states.Add(setupState.GetState(), setupState);
 
         IState startState = new GameStartState(this, gameController);
