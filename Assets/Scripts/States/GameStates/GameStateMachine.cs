@@ -1,9 +1,20 @@
 public class GameStateMachine : StateMachine
 {
-    public GameStateMachine(GameController gameController) : base(gameController)
+    private readonly GameController gameController;
+    private readonly SetupStateMachine setupStateMachine;
+
+    public GameStateMachine(GameController gameController)
     {
+        this.gameController = gameController;
+        setupStateMachine = new SetupStateMachine(gameController);
         SetupStates();
         SetCurrentState(IState.State.Board_Setup);
+    }
+
+    public override void AddListener(IStateListener listener)
+    {
+        base.AddListener(listener);
+        setupStateMachine.AddListener(listener);
     }
 
     private void SetupStates()

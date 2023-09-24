@@ -63,6 +63,7 @@ public class UiHandler : MonoBehaviour
         DisplayText(importantText);
     }
 
+    //TODO If 2 are called in quick succession it doesn't work very well. How to deal with that?
     public void DisplayImportantText(float displayTimeInSeconds)
     {
         DisplayText(importantText);

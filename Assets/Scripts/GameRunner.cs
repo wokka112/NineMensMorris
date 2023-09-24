@@ -19,8 +19,6 @@ public class GameRunner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("Game starting!");
-        Debug.Log("Prepare to place your pieces!");
         GameObject[] spaceObjects = GameObject.FindGameObjectsWithTag("Space");
         Space[] spaces = new Space[spaceObjects.Length]; 
         for (int i = 0; i < spaceObjects.Length; i++) {
@@ -28,6 +26,7 @@ public class GameRunner : MonoBehaviour
         }
         gameController = new GameController(spaces, blackPiece, whitePiece, spaceLayer, pieceLayer, uiHandler);
         stateMachine = new GameStateMachine(gameController);
+
         stateMachine.AddListener(gameController);
     }
 

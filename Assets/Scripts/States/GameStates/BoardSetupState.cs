@@ -1,4 +1,5 @@
-public class BoardSetupState : IState
+using UnityEngine;
+public class BoardSetupState : MonoBehaviour, IState
 {
     private const IState.State state = IState.State.Board_Setup;
 
@@ -10,12 +11,7 @@ public class BoardSetupState : IState
     {
         this.gameStateMachine = gameStateMachine;
         this.gameController = gameController;
-
-        setupStateMachine = new SetupStateMachine(gameController);
-        gameStateMachine.getListeners().ForEach(delegate (IStateListener l)
-        {
-            setupStateMachine.AddListener(l);
-        });
+        setupStateMachine = gameStateMachine.GetSetupStateMachine();
     }
 
     public void Process()

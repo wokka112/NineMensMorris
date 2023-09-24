@@ -178,6 +178,7 @@ public class GameController : IStateListener
 
     public void OnStateChange(IState.State state)
     {
+        Debug.Log("hit state change");
         switch (state)
         {
             case (IState.State.Board_Setup):

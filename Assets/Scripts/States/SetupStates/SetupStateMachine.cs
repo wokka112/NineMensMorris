@@ -1,7 +1,10 @@
 public class SetupStateMachine : StateMachine
 {
-    public SetupStateMachine(GameController gameController) : base(gameController)
+    private readonly GameController gameController;
+
+    public SetupStateMachine(GameController gameController) 
     {
+        this.gameController = gameController;
         SetupStates();
         SetCurrentState(IState.State.Setup_Highlight_Empty_Spaces);
     }
