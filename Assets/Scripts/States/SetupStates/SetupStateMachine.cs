@@ -5,6 +5,11 @@ public class SetupStateMachine : StateMachine
     public SetupStateMachine(GameController gameController) 
     {
         this.gameController = gameController;
+    }
+
+    public override void Init()
+    {
+        states.Clear();
         SetupStates();
         SetCurrentState(IState.State.Setup_Highlight_Empty_Spaces);
     }

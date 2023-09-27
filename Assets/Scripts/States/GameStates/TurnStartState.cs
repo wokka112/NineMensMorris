@@ -15,9 +15,6 @@ public class TurnStartState : IState
 
     public void Process()
     {
-        //TODO replace this with GUI stuff when we have one to say it's the player's turn.
-        Debug.Log(gameController.GetCurrentPlayer() + "'s turn!");
-
         gameController.MakeCurrentPlayersMovablePiecesSelectable();
         stateMachine.SetCurrentState(IState.State.Turn_Pick_Piece);
     }

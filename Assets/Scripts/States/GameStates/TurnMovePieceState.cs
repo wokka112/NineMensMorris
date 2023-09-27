@@ -24,9 +24,6 @@ public class TurnMovePieceState : IState
                 piece.Move(space);
                 gameController.MakeAllSpacesUnselectable();
                 stateMachine.SetCurrentState(IState.State.Turn_Decision_Making);
-            } else
-            {
-                Debug.Log("Please click a selectable space");
             }
         } else if (Input.GetMouseButtonDown(1))
         {

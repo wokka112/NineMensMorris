@@ -22,7 +22,6 @@ public class TurnPickPieceState : IState
             {
                 if(!piece.CanMove())
                 {
-                    Debug.Log("This piece can't move! Pick another!");
                     return;
                 }
 

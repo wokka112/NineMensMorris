@@ -169,7 +169,6 @@ public class GameController : IStateListener
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);
         if (Physics.Raycast(ray, out hitData, 1000, pieceLayer))
         {
-            Debug.Log("Ray hit something: " + hitData);
             piece = hitData.transform.GetComponent<Piece>();
         }
 
@@ -181,51 +180,43 @@ public class GameController : IStateListener
         switch (state)
         {
             case (IState.State.Board_Setup):
-                uiHandler.SetImportantText("BOARD SETUP");
-                uiHandler.DisplayImportantText(2f);
+                uiHandler.SetImportantText("BOARD SETUP", 1f, true);
                 break;
             case (IState.State.Setup_Place_Piece):
-                uiHandler.SetImportantText(currentPlayer.ToString() + "'s turn!");
-                uiHandler.DisplayImportantText(2f);
+                uiHandler.SetPromptText(currentPlayer.ToString() + "'s turn!", 0.5f, false);
                 uiHandler.SetPromptText("Place piece");
-                uiHandler.DisplayPromptText();
                 break;
             case (IState.State.Setup_Check_Setup_End):
                 uiHandler.HidePromptText();
                 break;
             case (IState.State.Game_Start):
-                uiHandler.SetImportantText("GAME START");
-                uiHandler.DisplayImportantText(2f);
+                uiHandler.SetImportantText("GAME START", 1f, true);
                 break;
             case (IState.State.Turn_Start):
-                uiHandler.SetImportantText(currentPlayer.ToString() + "'s turn!");
-                uiHandler.DisplayImportantText(2f);
+                uiHandler.SetPromptText(currentPlayer.ToString() + "'s turn!", 0.5f, false);
                 break;
             case (IState.State.Turn_Pick_Piece):
                 uiHandler.SetPromptText("Select piece to move");
-                uiHandler.DisplayPromptText();
                 break;
             case (IState.State.Turn_Move_Piece):
                 uiHandler.SetPromptText("Select where to move");
-                uiHandler.DisplayPromptText();
                 break;
             case (IState.State.Turn_End):
                 uiHandler.HidePromptText();
                 break;
             case (IState.State.Game_End):
-                uiHandler.SetImportantText(winner + " won!");
+                uiHandler.SetImportantText(GetWinner() + " won!", 1f, false);
+                uiHandler.ClearPromptItems();
                 uiHandler.HidePromptText();
-                uiHandler.DisplayImportantText();
                 break;
             case (IState.State.Remove_Piece):
-                uiHandler.SetPromptText("Select a piece to remove");
-                uiHandler.DisplayPromptText();
+                uiHandler.SetPromptText("Select piece to remove");
                 break;
             case (IState.State.Error):
                 //TODO what to do here???
                 // How do we deal with it?
-                uiHandler.SetImportantText("An error occurred!");
-                uiHandler.DisplayImportantText();
+                uiHandler.SetImportantText("An error occurred!", 2f, false);
+                uiHandler.ClearPromptItems();
                 uiHandler.HidePromptText();
                 break;
             default:

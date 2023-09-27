@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public abstract class StateMachine 
+public abstract class StateMachine
 {
     protected IState currentState;
     protected Dictionary<IState.State, IState> states;
@@ -66,4 +66,6 @@ public abstract class StateMachine
             listener.OnStateChange(state);
         });
     }
+
+    public abstract void Init();
 }

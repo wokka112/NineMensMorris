@@ -1,40 +1,92 @@
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class UiHandler : MonoBehaviour
 {
+    private LinkedList<DisplayItem> promptDisplayItems;
+    private DisplayItem currentPrompt;
+    private float currentPromptDisplayTime;
+
+    private LinkedList<DisplayItem> importantDisplayItems;
+    private DisplayItem currentImportant;
+    private float currentImportantDisplayTime;
+
     [SerializeField]
     private TextMeshProUGUI promptText;
     [SerializeField]
-    private TextMeshProUGUI turnText;
-    [SerializeField]
     private TextMeshProUGUI importantText;
+
+    public void Awake()
+    {
+        promptDisplayItems = new LinkedList<DisplayItem>();
+        currentPromptDisplayTime = 0f;
+
+        importantDisplayItems = new LinkedList<DisplayItem>();
+        currentImportantDisplayTime = 0f;
+    }
+
+    public void FixedUpdate()
+    {
+        currentPromptDisplayTime += Time.deltaTime;
+        float currentPromptMinDisplayTime = currentPrompt != null ? currentPrompt.GetMinDisplayTime() : 0f;
+        if (promptDisplayItems.Count > 0 && (currentPromptDisplayTime >= currentPromptMinDisplayTime))
+        {
+            currentPrompt = promptDisplayItems.First.Value;
+            SetText(promptText, currentPrompt.GetDisplayText());
+            DisplayText(promptText);
+            promptDisplayItems.RemoveFirst();
+
+            currentPromptDisplayTime = 0;
+        } else if (currentPrompt != null && currentPrompt.ShouldHideAfter() && (currentPromptDisplayTime >= currentPromptMinDisplayTime))
+        {
+            currentPrompt = null;
+            HidePromptText();
+            currentPromptDisplayTime = 0;
+        }
+
+        currentImportantDisplayTime += Time.deltaTime;
+        float currentImportantMinDisplayTime = currentImportant != null ? currentImportant.GetMinDisplayTime() : 0f;
+        if (importantDisplayItems.Count > 0 && (currentImportantDisplayTime >= currentImportantMinDisplayTime))
+        {
+            currentImportant = importantDisplayItems.First.Value;
+            SetText(importantText, currentImportant.GetDisplayText());
+            DisplayText(importantText);
+            importantDisplayItems.RemoveFirst();
+
+            currentImportantDisplayTime = 0;
+        } else if (currentImportant != null && currentImportant.ShouldHideAfter() && currentImportantDisplayTime >= currentImportantMinDisplayTime)
+        {
+            currentImportant = null;
+            HideImportantText();
+            currentImportantDisplayTime = 0;
+        }
+    }
 
     public void SetPromptText(string text)
     {
-        promptText.text = text;
+        promptDisplayItems.AddLast(new DisplayItem(text, 0, false));
     }
 
-    public void SetTurnText(string text)
+    public void SetPromptText(string text, float minimumDisplayTime, bool shouldHideAfter)
     {
-        turnText.text = text;
+        promptDisplayItems.AddLast(new DisplayItem(text, minimumDisplayTime, shouldHideAfter));
     }
 
     public void SetImportantText(string text)
     {
-        importantText.text = text;
+        importantDisplayItems.AddLast(new DisplayItem(text, 0, false));
     }
 
-    public void DisplayPromptText()
+    public void SetImportantText(string text, float minimumDisplayTime, bool shouldHideAfter)
     {
-        DisplayText(promptText);
+        importantDisplayItems.AddLast(new DisplayItem(text, minimumDisplayTime, shouldHideAfter));
     }
 
-    public void DisplayPromptText(float displayTimeInSeconds)
+    public void ClearPromptItems()
     {
-        DisplayText(promptText);
-        StartCoroutine(WaitAndHide(promptText, displayTimeInSeconds));
+        promptDisplayItems.Clear();
     }
 
     public void HidePromptText()
@@ -42,32 +94,9 @@ public class UiHandler : MonoBehaviour
         HideText(promptText);
     }
 
-    public void DisplayTurnText()
+    public void ClearImportantItems()
     {
-        DisplayText(turnText);
-    }
-
-    public void DisplayTurnText(float displayTimeInSeconds)
-    {
-        DisplayText(turnText);
-        StartCoroutine(WaitAndHide(turnText, displayTimeInSeconds));
-    }
-
-    public void HideTurnText()
-    {
-        HideText(turnText);
-    }
-
-    public void DisplayImportantText()
-    {
-        DisplayText(importantText);
-    }
-
-    //TODO If 2 are called in quick succession it doesn't work very well. How to deal with that?
-    public void DisplayImportantText(float displayTimeInSeconds)
-    {
-        DisplayText(importantText);
-        StartCoroutine(WaitAndHide(importantText, displayTimeInSeconds));
+        importantDisplayItems.Clear();
     }
 
     public void HideImportantText()
@@ -80,14 +109,13 @@ public class UiHandler : MonoBehaviour
         text.gameObject.SetActive(true);
     }
 
+    private void SetText(TextMeshProUGUI textElement, string text)
+    {
+        textElement.text = text;
+    }
+
     private void HideText(TextMeshProUGUI text)
     {
         text.gameObject.SetActive(false);
-    }
-
-    private IEnumerator WaitAndHide(TextMeshProUGUI text, float displayTimeInSeconds)
-    {
-        yield return new WaitForSeconds(displayTimeInSeconds);
-        HideText(text);
     }
 }

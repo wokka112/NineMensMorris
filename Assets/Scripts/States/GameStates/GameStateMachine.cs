@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class GameStateMachine : StateMachine
 {
     private readonly GameController gameController;
@@ -7,14 +9,20 @@ public class GameStateMachine : StateMachine
     {
         this.gameController = gameController;
         setupStateMachine = new SetupStateMachine(gameController);
-        SetupStates();
-        SetCurrentState(IState.State.Board_Setup);
     }
 
     public override void AddListener(IStateListener listener)
     {
         base.AddListener(listener);
         setupStateMachine.AddListener(listener);
+    }
+
+    public override void Init()
+    {
+        states.Clear();
+        SetupStates();
+        SetCurrentState(IState.State.Board_Setup);
+        setupStateMachine.Init();
     }
 
     private void SetupStates()

@@ -28,6 +28,7 @@ public class GameRunner : MonoBehaviour
         stateMachine = new GameStateMachine(gameController);
 
         stateMachine.AddListener(gameController);
+        stateMachine.Init();
     }
 
     // Update is called once per frame
