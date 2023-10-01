@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Threading;
 
 public class GameController : IStateListener
 {
@@ -11,6 +12,7 @@ public class GameController : IStateListener
 
     private BoardState boardState;
     private Colour currentPlayer;
+    // TODO this and GetWinner() are one big code smell. Resolve somehow.
     private Colour? winner;
     private Piece selectedPiece;
     private int blackPiecesPlaced;
@@ -175,52 +177,63 @@ public class GameController : IStateListener
         return piece;
     }
 
+    //TODO should this move into a dif class to take away the UI responsibility from the game controller?
     public void OnStateChange(IState.State state)
     {
         switch (state)
         {
             case (IState.State.Board_Setup):
-                uiHandler.SetImportantText("BOARD SETUP", 1f, true);
+                uiHandler.AddPromptText("Board setup", 1f, true);
                 break;
             case (IState.State.Setup_Place_Piece):
-                uiHandler.SetPromptText(currentPlayer.ToString() + "'s turn!", 0.5f, false);
-                uiHandler.SetPromptText("Place piece");
+                uiHandler.AddPromptText(currentPlayer.ToString() + "'s turn!", 0.5f, false);
+                uiHandler.AddPromptText("Place piece");
                 break;
             case (IState.State.Setup_Check_Setup_End):
                 uiHandler.HidePromptText();
                 break;
             case (IState.State.Game_Start):
-                uiHandler.SetImportantText("GAME START", 1f, true);
+                uiHandler.AddPromptText("Game start", 1f, true);
                 break;
             case (IState.State.Turn_Start):
-                uiHandler.SetPromptText(currentPlayer.ToString() + "'s turn!", 0.5f, false);
+                uiHandler.AddPromptText(currentPlayer.ToString() + "'s turn!", 0.5f, false);
                 break;
             case (IState.State.Turn_Pick_Piece):
-                uiHandler.SetPromptText("Select piece to move");
+                uiHandler.AddPromptText("Select piece to move");
                 break;
             case (IState.State.Turn_Move_Piece):
-                uiHandler.SetPromptText("Select where to move");
+                uiHandler.AddPromptText("Select where to move");
                 break;
             case (IState.State.Turn_End):
                 uiHandler.HidePromptText();
                 break;
             case (IState.State.Game_End):
-                uiHandler.SetImportantText(GetWinner() + " won!", 1f, false);
                 uiHandler.ClearPromptItems();
-                uiHandler.HidePromptText();
+                uiHandler.SetWinner(GetWinner());
+                new Thread(() => WaitAndDisplayEndMenu(200)).Start();
                 break;
             case (IState.State.Remove_Piece):
-                uiHandler.SetPromptText("Select piece to remove");
+                uiHandler.AddPromptText("Select piece to remove");
                 break;
             case (IState.State.Error):
                 //TODO what to do here???
                 // How do we deal with it?
-                uiHandler.SetImportantText("An error occurred!", 2f, false);
                 uiHandler.ClearPromptItems();
-                uiHandler.HidePromptText();
+                uiHandler.AddPromptText("An error occurred!", 2f, false);
                 break;
             default:
                 break;
         }
+    }
+
+    private void WaitAndDisplayEndMenu(int waitTimeInMillis)
+    {
+        new Thread(() =>
+        {
+            Thread.Sleep(waitTimeInMillis);
+            uiHandler.ClearPromptItems();
+            uiHandler.HidePromptText();
+            uiHandler.DisplayEndMenu();
+        }).Start();
     }
 }

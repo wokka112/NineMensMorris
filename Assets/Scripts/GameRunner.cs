@@ -34,6 +34,9 @@ public class GameRunner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //TODO should we add the key press listening here for the options menu?
+        // Then we could have a IsPaused variable in here and the UiHandler which would pause the processing of game states and ui.
+        // Could also ignore it if we're on the final state.
         if (stateMachine.IsOnFinalState())
         {
             // TODO should we display a replay menu here? Or what? Or should that be dealt with in the state machine?

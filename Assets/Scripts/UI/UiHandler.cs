@@ -1,30 +1,27 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class UiHandler : MonoBehaviour
 {
+    //TODO better way to deal with this than display items and queue system?
     private LinkedList<DisplayItem> promptDisplayItems;
     private DisplayItem currentPrompt;
     private float currentPromptDisplayTime;
 
-    private LinkedList<DisplayItem> importantDisplayItems;
-    private DisplayItem currentImportant;
-    private float currentImportantDisplayTime;
-
     [SerializeField]
     private TextMeshProUGUI promptText;
     [SerializeField]
-    private TextMeshProUGUI importantText;
+    private GameObject endMenu;
+    [SerializeField]
+    private TextMeshProUGUI endMenuWinnerText;
+    [SerializeField]
+    private GameObject optionsMenu;
 
     public void Awake()
     {
         promptDisplayItems = new LinkedList<DisplayItem>();
         currentPromptDisplayTime = 0f;
-
-        importantDisplayItems = new LinkedList<DisplayItem>();
-        currentImportantDisplayTime = 0f;
     }
 
     public void FixedUpdate()
@@ -34,8 +31,8 @@ public class UiHandler : MonoBehaviour
         if (promptDisplayItems.Count > 0 && (currentPromptDisplayTime >= currentPromptMinDisplayTime))
         {
             currentPrompt = promptDisplayItems.First.Value;
-            SetText(promptText, currentPrompt.GetDisplayText());
-            DisplayText(promptText);
+            SetPromptText(currentPrompt.GetDisplayText());
+            DisplayPromptText();
             promptDisplayItems.RemoveFirst();
 
             currentPromptDisplayTime = 0;
@@ -45,77 +42,66 @@ public class UiHandler : MonoBehaviour
             HidePromptText();
             currentPromptDisplayTime = 0;
         }
-
-        currentImportantDisplayTime += Time.deltaTime;
-        float currentImportantMinDisplayTime = currentImportant != null ? currentImportant.GetMinDisplayTime() : 0f;
-        if (importantDisplayItems.Count > 0 && (currentImportantDisplayTime >= currentImportantMinDisplayTime))
-        {
-            currentImportant = importantDisplayItems.First.Value;
-            SetText(importantText, currentImportant.GetDisplayText());
-            DisplayText(importantText);
-            importantDisplayItems.RemoveFirst();
-
-            currentImportantDisplayTime = 0;
-        } else if (currentImportant != null && currentImportant.ShouldHideAfter() && currentImportantDisplayTime >= currentImportantMinDisplayTime)
-        {
-            currentImportant = null;
-            HideImportantText();
-            currentImportantDisplayTime = 0;
-        }
     }
 
-    public void SetPromptText(string text)
+    public void AddPromptText(string text)
     {
         promptDisplayItems.AddLast(new DisplayItem(text, 0, false));
     }
 
-    public void SetPromptText(string text, float minimumDisplayTime, bool shouldHideAfter)
+    public void AddPromptText(string text, float minimumDisplayTime, bool shouldHideAfter)
     {
         promptDisplayItems.AddLast(new DisplayItem(text, minimumDisplayTime, shouldHideAfter));
-    }
-
-    public void SetImportantText(string text)
-    {
-        importantDisplayItems.AddLast(new DisplayItem(text, 0, false));
-    }
-
-    public void SetImportantText(string text, float minimumDisplayTime, bool shouldHideAfter)
-    {
-        importantDisplayItems.AddLast(new DisplayItem(text, minimumDisplayTime, shouldHideAfter));
     }
 
     public void ClearPromptItems()
     {
         promptDisplayItems.Clear();
     }
+    public void DisplayEndMenu()
+    {
+        endMenu.SetActive(true);
+    }
+
+    public void HideEndMenu()
+    {
+        endMenu.SetActive(false);
+    }
+
+    public void DisplayOptionsMenu()
+    {
+        optionsMenu.SetActive(true);
+    }
+
+    public void HideOptionsMenu()
+    {
+        optionsMenu.SetActive(false);
+    }
+
 
     public void HidePromptText()
     {
-        HideText(promptText);
+        promptText.gameObject.SetActive(false);
     }
 
-    public void ClearImportantItems()
+    public void SetWinner(Colour? winner)
     {
-        importantDisplayItems.Clear();
+        if (winner == null)
+        {
+            Debug.LogError("Tried setting the winner in the UI without there being a winner!");
+        } else
+        {
+            endMenuWinnerText.SetText(winner.ToString() + " won!");
+        }
     }
 
-    public void HideImportantText()
+    private void DisplayPromptText()
     {
-        HideText(importantText);
+        promptText.gameObject.SetActive(true);
     }
 
-    private void DisplayText(TextMeshProUGUI text)
+    private void SetPromptText(string text)
     {
-        text.gameObject.SetActive(true);
-    }
-
-    private void SetText(TextMeshProUGUI textElement, string text)
-    {
-        textElement.text = text;
-    }
-
-    private void HideText(TextMeshProUGUI text)
-    {
-        text.gameObject.SetActive(false);
+        promptText.text = text;
     }
 }

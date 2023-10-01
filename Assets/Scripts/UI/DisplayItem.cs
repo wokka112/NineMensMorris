@@ -4,10 +4,10 @@ public class DisplayItem
     private readonly float minDisplayTime;
     private readonly bool shouldHideAfter;
 
-    public DisplayItem(string displayText, float displayTime, bool shouldHideAfter)
+    public DisplayItem(string displayText, float minDisplayTime, bool shouldHideAfter)
     {
         this.displayText = displayText;
-        this.minDisplayTime = displayTime;
+        this.minDisplayTime = minDisplayTime;
         this.shouldHideAfter = shouldHideAfter;
     }
 
