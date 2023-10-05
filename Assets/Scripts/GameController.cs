@@ -210,7 +210,7 @@ public class GameController : IStateListener
             case (IState.State.Game_End):
                 uiHandler.ClearPromptItems();
                 uiHandler.SetWinner(GetWinner());
-                new Thread(() => WaitAndDisplayEndMenu(200)).Start();
+                uiHandler.DisplayEndMenu();
                 break;
             case (IState.State.Remove_Piece):
                 uiHandler.AddPromptText("Select piece to remove");

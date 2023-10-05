@@ -16,7 +16,7 @@ public class UiHandler : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI endMenuWinnerText;
     [SerializeField]
-    private GameObject optionsMenu;
+    private GameObject pauseMenu;
 
     public void Awake()
     {
@@ -68,16 +68,25 @@ public class UiHandler : MonoBehaviour
         endMenu.SetActive(false);
     }
 
-    public void DisplayOptionsMenu()
+    public void DisplayPauseMenu()
     {
-        optionsMenu.SetActive(true);
+        pauseMenu.SetActive(true);
     }
 
-    public void HideOptionsMenu()
+    public void HidePauseMenu()
     {
-        optionsMenu.SetActive(false);
+        pauseMenu.SetActive(false);
     }
 
+    public bool IsPauseMenuDisplayed()
+    {
+        return pauseMenu.activeSelf == true;
+    }
+
+    public bool IsEndMenuDisplayed()
+    {
+        return endMenu.activeSelf == true;
+    }
 
     public void HidePromptText()
     {

@@ -15,6 +15,7 @@ public class GameRunner : MonoBehaviour
 
     private GameController gameController;
     private GameStateMachine stateMachine;
+    private bool isPaused;
 
     // Start is called before the first frame update
     void Start()
@@ -34,16 +35,56 @@ public class GameRunner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //TODO should we add the key press listening here for the options menu?
-        // Then we could have a IsPaused variable in here and the UiHandler which would pause the processing of game states and ui.
-        // Could also ignore it if we're on the final state.
         if (stateMachine.IsOnFinalState())
         {
-            // TODO should we display a replay menu here? Or what? Or should that be dealt with in the state machine?
+            if(Input.GetKeyDown(KeyCode.Escape))
+            {
+                if (uiHandler.IsEndMenuDisplayed())
+                {
+                    uiHandler.HideEndMenu();
+                }
+                else
+                {
+                    uiHandler.DisplayEndMenu();
+                }
+            }
         }
         else
         {
-            stateMachine.Process();
+            if(Input.GetKeyDown(KeyCode.Escape))
+            {
+                if (uiHandler.IsPauseMenuDisplayed())
+                {
+                    uiHandler.HidePauseMenu();
+                    UnPauseGame();
+                }
+                else
+                {
+                    uiHandler.DisplayPauseMenu();
+                    PauseGame();
+                }
+            }
+
+            if (isPaused)
+            {
+
+            }
+            else
+            {
+                stateMachine.Process();
+            }
         }
+    }
+
+    public void PauseGame()
+    {
+        Time.timeScale = 0f;
+        isPaused = true;
+    }
+
+    public void UnPauseGame()
+    {
+        Time.timeScale = 1f;
+        isPaused = false;
     }
 }
