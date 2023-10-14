@@ -1,15 +1,15 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
-    //TODO implement volume controls once we have sound
-    [SerializeField]
-    private Slider volumeSlider;
     [SerializeField]
     private Button resumeBtn;
     [SerializeField]
-    private Button quitBtn;
+    private Button optionsBtn;
+    [SerializeField]
+    private Button mainMenuBtn;
     [SerializeField]
     private GameRunner gameRunner;
     [SerializeField]
@@ -19,7 +19,8 @@ public class PauseMenu : MonoBehaviour
     void Start()
     {
         resumeBtn.onClick.AddListener(Resume);
-        quitBtn.onClick.AddListener(Quit);
+        optionsBtn.onClick.AddListener(ShowOptions);
+        mainMenuBtn.onClick.AddListener(GoToMainMenu);
     }
 
     private void Resume()
@@ -28,9 +29,14 @@ public class PauseMenu : MonoBehaviour
         gameRunner.UnPauseGame();
     }
 
-    private void Quit()
+    private void ShowOptions()
     {
-        //TODO make this revert to start menu scene once that's made.
-        Debug.Log("You quit the game!");
+        uiHandler.HidePauseMenu();
+        uiHandler.DisplayOptionsMenu();
+    }
+
+    private void GoToMainMenu()
+    {
+        SceneManager.LoadScene(0);
     }
 }

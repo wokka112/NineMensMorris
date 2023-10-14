@@ -5,6 +5,7 @@ using UnityEngine;
 public class UiHandler : MonoBehaviour
 {
     //TODO better way to deal with this than display items and queue system?
+    // TODO move the prompt logic out of here.
     private LinkedList<DisplayItem> promptDisplayItems;
     private DisplayItem currentPrompt;
     private float currentPromptDisplayTime;
@@ -17,6 +18,8 @@ public class UiHandler : MonoBehaviour
     private TextMeshProUGUI endMenuWinnerText;
     [SerializeField]
     private GameObject pauseMenu;
+    [SerializeField]
+    private GameObject optionsMenu;
 
     public void Awake()
     {
@@ -76,6 +79,16 @@ public class UiHandler : MonoBehaviour
     public void HidePauseMenu()
     {
         pauseMenu.SetActive(false);
+    }
+
+    public void DisplayOptionsMenu()
+    {
+        optionsMenu.SetActive(true); 
+    }
+
+    public void HideOptionsMenu()
+    {
+        optionsMenu.SetActive(false);
     }
 
     public bool IsPauseMenuDisplayed()

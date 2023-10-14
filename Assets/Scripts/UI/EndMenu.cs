@@ -28,12 +28,11 @@ public class EndMenu : MonoBehaviour
 
     private void Replay()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     private void MainMenu()
     {
-        //TODO implement once we have a main menu scene
-        Debug.Log("You clicked to go to the main menu!");
+        SceneManager.LoadScene(0);
     }
 }
