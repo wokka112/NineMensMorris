@@ -15,12 +15,23 @@ public class PauseMenu : MonoBehaviour
     [SerializeField]
     private UiHandler uiHandler;
 
+    private AudioManager audioManager;
+
+    private const string CLICK = "click";
+
     // Start is called before the first frame update
     void Start()
     {
+        audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
+
         resumeBtn.onClick.AddListener(Resume);
+        resumeBtn.onClick.AddListener(PlayClick);
+
         optionsBtn.onClick.AddListener(ShowOptions);
+        optionsBtn.onClick.AddListener(PlayClick);
+
         mainMenuBtn.onClick.AddListener(GoToMainMenu);
+        mainMenuBtn.onClick.AddListener(PlayClick);
     }
 
     private void Resume()
@@ -38,5 +49,10 @@ public class PauseMenu : MonoBehaviour
     private void GoToMainMenu()
     {
         SceneManager.LoadScene(0);
+    }
+
+    private void PlayClick()
+    {
+        audioManager.PlaySound(CLICK);
     }
 }

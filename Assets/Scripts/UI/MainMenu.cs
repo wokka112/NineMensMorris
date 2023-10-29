@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    private AudioManager audioManager;
     [SerializeField]
     private GameObject optionsMenu;
 
@@ -12,13 +13,27 @@ public class MainMenu : MonoBehaviour
     [SerializeField]
     private Button optionsButton;
     [SerializeField]
+    private Button creditsButton;
+    [SerializeField]
     private Button quitButton;
+
+    private const string CLICK = "click";
 
     void Start()
     {
+        audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
+
         startButton.onClick.AddListener(StartGame);
+        startButton.onClick.AddListener(PlayClick);
+
         optionsButton.onClick.AddListener(ShowOptions);
+        optionsButton.onClick.AddListener(PlayClick);
+
+        creditsButton.onClick.AddListener(ViewCredits);
+        creditsButton.onClick.AddListener(PlayClick);
+        
         quitButton.onClick.AddListener(Quit);
+        quitButton.onClick.AddListener(PlayClick);
     }
 
     private void StartGame()
@@ -32,8 +47,18 @@ public class MainMenu : MonoBehaviour
         optionsMenu.SetActive(true);
     }
 
+    private void ViewCredits()
+    {
+        Debug.Log("View credits");
+    }
+
     private void Quit()
     {
         Application.Quit();
+    }
+
+    private void PlayClick()
+    {
+        audioManager.PlaySound(CLICK);
     }
 }
