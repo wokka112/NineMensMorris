@@ -12,6 +12,8 @@ public class GameRunner : MonoBehaviour
     private GameObject whitePiece;
     [SerializeField]
     private UiHandler uiHandler;
+    [SerializeField]
+    private AudioManager audioManager;
 
     private GameController gameController;
     private GameStateMachine stateMachine;
@@ -25,7 +27,7 @@ public class GameRunner : MonoBehaviour
         for (int i = 0; i < spaceObjects.Length; i++) {
             spaces[i] = spaceObjects[i].GetComponent<Space>();
         }
-        gameController = new GameController(spaces, blackPiece, whitePiece, spaceLayer, pieceLayer, uiHandler);
+        gameController = new GameController(spaces, blackPiece, whitePiece, spaceLayer, pieceLayer, uiHandler, audioManager);
         stateMachine = new GameStateMachine(gameController);
 
         stateMachine.AddListener(gameController);

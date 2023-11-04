@@ -21,7 +21,7 @@ public class TurnMovePieceState : IState
             if (space != null && space.IsSelectable())
             {
                 Piece piece = gameController.GetSelectedPiece();
-                piece.Move(space);
+                gameController.MovePiece(piece, space);
                 gameController.MakeAllSpacesUnselectable();
                 stateMachine.SetCurrentState(IState.State.Turn_Decision_Making);
             }

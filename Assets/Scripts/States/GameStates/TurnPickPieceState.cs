@@ -25,7 +25,7 @@ public class TurnPickPieceState : IState
                     return;
                 }
 
-                gameController.SelectPiece(piece);
+                gameController.PickUpPiece(piece);
                 gameController.MakeCurrentPlayersPiecesUnselectable();
                 gameController.MakeSpacesPieceCanMoveToSelectable(piece);
 

@@ -10,6 +10,7 @@ public class GameController : IStateListener
     private LayerMask spaceLayer;
     private LayerMask pieceLayer;
 
+    private AudioManager audioManager;
     private BoardState boardState;
     private Colour currentPlayer;
     // TODO this and GetWinner() are one big code smell. Resolve somehow.
@@ -17,11 +18,12 @@ public class GameController : IStateListener
     private Piece selectedPiece;
     private int blackPiecesPlaced;
 
-    public GameController(Space[] allSpaces, GameObject blackPiecePrefab, GameObject whitePiecePrefab, LayerMask spaceLayer, LayerMask pieceLayer, UiHandler uiHandler)
+    public GameController(Space[] allSpaces, GameObject blackPiecePrefab, GameObject whitePiecePrefab, LayerMask spaceLayer, LayerMask pieceLayer, UiHandler uiHandler, AudioManager audioManager)
     {
         this.spaceLayer = spaceLayer;
         this.pieceLayer = pieceLayer;
         this.uiHandler = uiHandler;
+        this.audioManager = audioManager;
 
         boardState = new BoardState(allSpaces, blackPiecePrefab, whitePiecePrefab);
         currentPlayer = Colour.WHITE;
@@ -46,9 +48,16 @@ public class GameController : IStateListener
         }
     }
 
-    public void SelectPiece(Piece piece)
+    public void PickUpPiece(Piece piece)
     {
-        selectedPiece = piece;
+        SelectPiece(piece);
+        PlayPickUpSound();
+    }
+
+    public void MovePiece(Piece piece, Space space)
+    {
+        piece.Move(space);
+        PlayPutDownSound();
     }
 
     public void DeselectSelectedPiece()
@@ -66,18 +75,17 @@ public class GameController : IStateListener
         return blackPiecesPlaced >= piecesToPlace;
     }
 
-    private void IncrementBlackPiecesPlaced()
-    {
-        blackPiecesPlaced++;
-    }
-
     public Piece PlacePiece(Space space)
     {
         Piece piece = boardState.PlacePiece(space, currentPlayer);
 
-        if (piece != null && currentPlayer == Colour.BLACK)
+        if (piece != null)
         {
-            IncrementBlackPiecesPlaced();
+            PlayPutDownSound();
+            if (currentPlayer == Colour.BLACK)
+            {
+                IncrementBlackPiecesPlaced();
+            }
         }
 
         return piece;
@@ -86,6 +94,7 @@ public class GameController : IStateListener
     public void RemovePiece(Piece piece)
     {
         boardState.RemovePiece(piece);
+        PlayPickUpSound();
     }
 
     public bool IsAbleToMove(Colour colour)
@@ -236,4 +245,28 @@ public class GameController : IStateListener
             uiHandler.DisplayEndMenu();
         }).Start();
     }
+
+    private void PlayPickUpSound()
+    {
+        const string PICK_UP = "pickUp";
+        audioManager.PlaySound(PICK_UP);
+    }
+
+    private void PlayPutDownSound()
+    {
+        const string PUT_DOWN = "putDown";
+        audioManager.PlaySound(PUT_DOWN);
+    }
+
+    private void SelectPiece(Piece piece)
+    {
+        selectedPiece = piece;
+    }
+
+    private void IncrementBlackPiecesPlaced()
+    {
+        blackPiecesPlaced++;
+    }
+
+
 }
