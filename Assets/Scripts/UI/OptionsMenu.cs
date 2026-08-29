@@ -22,6 +22,9 @@ public class OptionsMenu : MonoBehaviour
         backButton.onClick.AddListener(Back);
         backButton.onClick.AddListener(PlayClick);
 
+        effectsVolumeSlider.SetValueWithoutNotify(audioManager.GetEffectsVolume());
+        musicVolumeSlider.SetValueWithoutNotify(audioManager.GetMusicVolume());
+
         effectsVolumeSlider.onValueChanged.AddListener(audioManager.SetEffectsVolume);
         musicVolumeSlider.onValueChanged.AddListener(audioManager.SetMusicVolume);
     }
