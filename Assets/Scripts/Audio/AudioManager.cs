@@ -1,4 +1,5 @@
 using System;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -13,6 +14,23 @@ public class AudioManager : MonoBehaviour
     private AudioMixerGroup effectsMixerGroup;
     [SerializeField]
     private AudioMixerGroup musicMixerGroup;
+
+    [Tooltip("The minimum decibel value for the volume")]
+    [SerializeField]
+    private float minDb = -80.0f;
+    [Tooltip("The maximum decibel value for the volume")]
+    [SerializeField]
+    private float maxDb = 0.0f;
+
+    [Tooltip("The minimum decimal value for the volume sliders")]
+    [SerializeField]
+    private float minDecimal = 0.0f;
+    [Tooltip("The minimum decimal value for the volume sliders")]
+    [SerializeField]
+    private float maxDecimal = 1.0f;
+    [Tooltip("Additionally you can scale the volume along a nonlinear curve to give more precision in the middle to top range.")]
+    [Range(0.1f, 1f)]
+    public float linearity = 1.0f;
 
 
     void Awake()
@@ -38,26 +56,64 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void SetEffectsVolume(float volume)
+    public void SetEffectsVolumeFromDecimal(float decimalVolume)
     {
-        audioMixer.SetFloat("effectsVolume", volume);
+        SetVolumeFromDecimal("effectsVolume", decimalVolume);
     }
 
-    public float GetEffectsVolume()
+    public float GetDecimalEffectsVolume()
     {
-        audioMixer.GetFloat("effectsVolume", out float volume);
-        return volume;
+        return GetDecimalVolume("effectsVolume");
     }
 
-    public void SetMusicVolume(float volume)
+    public void SetMusicVolumeFromDecimal(float decimalVolume)
     {
-        audioMixer.SetFloat("musicVolume", volume);
+        SetVolumeFromDecimal("musicVolume", decimalVolume);
     }
 
-    public float GetMusicVolume()
+    public float GetDecimalMusicVolume()
     {
-        audioMixer.GetFloat("musicVolume", out float volume);
-        return volume;
+        return GetDecimalVolume("musicVolume");
+    }
+
+    private float GetDecimalVolume(string name)
+    {
+        audioMixer.GetFloat(name, out float decibelVolume);
+        if (decibelVolume <= minDb)
+        {
+            return minDecimal;
+        }
+
+        if (decibelVolume >= maxDb)
+        {
+            return maxDecimal;
+        }
+
+        var normalized = math.saturate(math.remap(minDb, maxDb, minDecimal, maxDecimal, decibelVolume));
+        var nonlinear = math.pow(normalized, 1f / linearity);
+        var exponential = math.pow(10f, nonlinear);
+        var remapped = math.remap(1, 10, minDecimal, maxDecimal, exponential);
+
+        return remapped;
+    }
+
+    private void SetVolumeFromDecimal(string volumeName, float decimalVolume)
+    {
+        if (decimalVolume <= minDecimal)
+        {
+            audioMixer.SetFloat(volumeName, minDb);
+        } else if (decimalVolume >= maxDecimal)
+        {
+            audioMixer.SetFloat(volumeName, maxDb);
+        } else
+        {
+            var remapped = math.remap(minDecimal, maxDecimal, 1, 10, decimalVolume);
+            var logarithmic = math.saturate(math.log10(remapped));
+            var nonlinear = math.pow(logarithmic, linearity);
+            var decibels = math.remap(minDecimal, maxDecimal, minDb, maxDb, nonlinear);
+
+            audioMixer.SetFloat(volumeName, decibels);
+        }
     }
 
     public void PlaySound(string name)
