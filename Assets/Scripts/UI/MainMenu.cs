@@ -49,7 +49,7 @@ public class MainMenu : MonoBehaviour
 
     private void ViewCredits()
     {
-        Debug.Log("View credits");
+        SceneManager.LoadScene(2);
     }
 
     private void Quit()
