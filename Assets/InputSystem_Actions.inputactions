@@ -22,7 +22,7 @@
                     "id": "183d7e81-29e7-4dc8-96b2-5b7f6a4cfcc2",
                     "expectedControlType": "",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Hold",
                     "initialStateCheck": false,
                     "priority": 0
                 },
@@ -61,6 +61,17 @@
                 },
                 {
                     "name": "",
+                    "id": "ccb7237c-8379-41bb-b3d2-7a712a0550f0",
+                    "path": "<Touchscreen>/Press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Touch",
+                    "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "8b9bc4ac-f752-400e-9541-c50a6bc7e342",
                     "path": "<Keyboard>/escape",
                     "interactions": "",
@@ -74,17 +85,6 @@
                     "name": "",
                     "id": "24afb338-19b6-453d-8b34-fc3cefff6fd5",
                     "path": "<Mouse>/position",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Point",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "a32fa2e2-a259-4dae-a90b-75e2458bc705",
-                    "path": "<Pen>/position",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",

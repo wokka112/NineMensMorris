@@ -15,7 +15,6 @@ public class GameInputManager : MonoBehaviour
         clickAction = InputSystem.actions.FindAction("Click");
         rightClickAction = InputSystem.actions.FindAction("RightClick");
         escapeAction = InputSystem.actions.FindAction("Escape");
-        Debug.Log("Escape action found: " + escapeAction != null);
         pointAction = InputSystem.actions.FindAction("Point");
     }
 

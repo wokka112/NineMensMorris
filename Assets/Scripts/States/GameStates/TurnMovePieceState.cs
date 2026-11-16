@@ -26,13 +26,21 @@ public class TurnMovePieceState : IState
                 gameController.MovePiece(piece, space);
                 gameController.MakeAllSpacesUnselectable();
                 stateMachine.SetCurrentState(IState.State.Turn_Decision_Making);
+            } else
+            {
+                CancelMove();
             }
         } else if (gameInputManager.IsRightClickClicked())
         {
+            CancelMove();
+        }
+    }
+
+    private void CancelMove()
+    {
             gameController.DeselectSelectedPiece();
             gameController.MakeAllSpacesUnselectable();
             stateMachine.SetCurrentState(IState.State.Turn_Start);
-        }
     }
 
     public IState.State GetState()
