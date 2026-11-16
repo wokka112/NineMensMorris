@@ -2,22 +2,30 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public class Credits : MonoBehaviour
 {
+    InputAction clickAction;
+    InputAction rightClickAction;
+    InputAction escapeAction;
+
     private static int MAIN_MENU_SCENE = 0;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         StartCoroutine(DelayedReturnToMainMenu());
+        clickAction = InputSystem.actions.FindAction("Click");
+        rightClickAction = InputSystem.actions.FindAction("RightClick");
+        escapeAction = InputSystem.actions.FindAction("Escape");
     }
 
     // Update is called once per frame
     void Update()
     {
         // If user hits LMB, RMB or ESC, return to main menu.
-        if (Input.GetMouseButtonDown(0)  || Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.Escape))
+        if (clickAction.IsPressed() || rightClickAction.IsPressed() || escapeAction.IsPressed())
         {
             ReturnToMainMenu();
         }  

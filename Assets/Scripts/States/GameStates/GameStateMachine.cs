@@ -4,11 +4,13 @@ public class GameStateMachine : StateMachine
 {
     private readonly GameController gameController;
     private readonly SetupStateMachine setupStateMachine;
+    private readonly GameInputManager gameInputManager;
 
-    public GameStateMachine(GameController gameController)
+    public GameStateMachine(GameController gameController, GameInputManager gameInputManager)
     {
         this.gameController = gameController;
-        setupStateMachine = new SetupStateMachine(gameController);
+        this.gameInputManager = gameInputManager;
+        setupStateMachine = new SetupStateMachine(gameController, gameInputManager);
     }
 
     public override void AddListener(IStateListener listener)
@@ -36,10 +38,10 @@ public class GameStateMachine : StateMachine
         IState turnStartState = new TurnStartState(this, gameController);
         states.Add(turnStartState.GetState(), turnStartState);
 
-        IState turnPickPieceState = new TurnPickPieceState(this, gameController);
+        IState turnPickPieceState = new TurnPickPieceState(this, gameController, gameInputManager);
         states.Add(turnPickPieceState.GetState(), turnPickPieceState);
 
-        IState turnMovePieceState = new TurnMovePieceState(this, gameController);
+        IState turnMovePieceState = new TurnMovePieceState(this, gameController, gameInputManager);
         states.Add(turnMovePieceState.GetState(), turnMovePieceState);
 
         IState turnDecisionMakingState = new TurnDecisionMakingState(this, gameController);
@@ -48,7 +50,7 @@ public class GameStateMachine : StateMachine
         IState turnEndState = new TurnEndState(this, gameController);
         states.Add(turnEndState.GetState(), turnEndState);
 
-        IState removePieceState = new RemovePieceState(this, gameController, turnEndState.GetState());
+        IState removePieceState = new RemovePieceState(this, gameController, gameInputManager, turnEndState.GetState());
         states.Add(removePieceState.GetState(), removePieceState);
 
         IState gameEndState = new GameEndState(this, gameController);

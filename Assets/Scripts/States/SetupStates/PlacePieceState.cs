@@ -6,11 +6,13 @@ public class PlacePieceState : IState
 
     private readonly GameController gameController;
     private readonly StateMachine stateMachine;
+    private readonly GameInputManager gameInputManager;
 
-    public PlacePieceState(StateMachine stateMachine, GameController gameController)
+    public PlacePieceState(StateMachine stateMachine, GameController gameController, GameInputManager gameInputManager)
     {
         this.gameController = gameController;
         this.stateMachine = stateMachine;
+        this.gameInputManager = gameInputManager;
     }
 
     public IState.State GetState()
@@ -25,9 +27,9 @@ public class PlacePieceState : IState
 
     public void Process()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (gameInputManager.IsClickClicked())
         {
-            Space space = gameController.GetSpaceClicked(Input.mousePosition);
+            Space space = gameController.GetSpaceClicked(gameInputManager.GetMousePoint());
             if (space != null && space.IsSelectable())
             {
                 Piece piece = gameController.PlacePiece(space);

@@ -14,6 +14,8 @@ public class GameRunner : MonoBehaviour
     private UiHandler uiHandler;
     [SerializeField]
     private AudioManager audioManager;
+    [SerializeField]
+    private GameInputManager gameInputManager;
 
     private GameController gameController;
     private GameStateMachine stateMachine;
@@ -28,7 +30,7 @@ public class GameRunner : MonoBehaviour
             spaces[i] = spaceObjects[i].GetComponent<Space>();
         }
         gameController = new GameController(spaces, blackPiece, whitePiece, spaceLayer, pieceLayer, uiHandler, audioManager);
-        stateMachine = new GameStateMachine(gameController);
+        stateMachine = new GameStateMachine(gameController, gameInputManager);
 
         stateMachine.AddListener(gameController);
         stateMachine.Init();
@@ -39,7 +41,7 @@ public class GameRunner : MonoBehaviour
     {
         if (stateMachine.IsOnFinalState())
         {
-            if(Input.GetKeyDown(KeyCode.Escape))
+            if(gameInputManager.IsEscapePressed())
             {
                 if (uiHandler.IsEndMenuDisplayed())
                 {
@@ -53,7 +55,7 @@ public class GameRunner : MonoBehaviour
         }
         else
         {
-            if(Input.GetKeyDown(KeyCode.Escape))
+            if(gameInputManager.IsEscapePressed())
             {
                 if (uiHandler.IsPauseMenuDisplayed())
                 {

@@ -6,18 +6,20 @@ public class TurnPickPieceState : IState
 
     private readonly GameStateMachine stateMachine;
     private readonly GameController gameController;
+    private readonly GameInputManager gameInputManager;
 
-    public TurnPickPieceState(GameStateMachine stateMachine, GameController gameController)
+    public TurnPickPieceState(GameStateMachine stateMachine, GameController gameController, GameInputManager gameInputManager)
     {
         this.stateMachine = stateMachine;
         this.gameController = gameController;
+        this.gameInputManager = gameInputManager;
     }
 
     public void Process()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (gameInputManager.IsClickClicked())
         {
-            Piece piece = gameController.GetPieceClicked(Input.mousePosition);
+            Piece piece = gameController.GetPieceClicked(gameInputManager.GetMousePoint());
             if (piece != null && piece.IsSelectable())
             {
                 if(!piece.CanMove())

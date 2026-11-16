@@ -6,12 +6,14 @@ public class RemovePieceState : IState
 
     private readonly StateMachine stateMachine;
     private readonly GameController gameController;
+    private readonly GameInputManager gameInputManager;
     private readonly IState.State nextState;
 
-    public RemovePieceState(StateMachine stateMachine, GameController gameController, IState.State nextState)
+    public RemovePieceState(StateMachine stateMachine, GameController gameController, GameInputManager gameInputManager, IState.State nextState)
     {
         this.stateMachine = stateMachine;
         this.gameController = gameController;
+        this.gameInputManager = gameInputManager;
         this.nextState = nextState;
     }
 
@@ -23,9 +25,9 @@ public class RemovePieceState : IState
     public void Process()
     {
         HighlightRemovablePieces();
-        if (Input.GetMouseButtonDown(0))
+        if (gameInputManager.IsClickClicked())
         {
-            Piece piece = gameController.GetPieceClicked(Input.mousePosition);
+            Piece piece = gameController.GetPieceClicked(gameInputManager.GetMousePoint());
             if (piece != null && piece.IsSelectable())
             {
                 gameController.RemovePiece(piece);

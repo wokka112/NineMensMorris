@@ -6,18 +6,20 @@ public class TurnMovePieceState : IState
 
     private GameStateMachine stateMachine;
     private GameController gameController;
+    private GameInputManager gameInputManager;
 
-    public TurnMovePieceState(GameStateMachine stateMachine, GameController gameController)
+    public TurnMovePieceState(GameStateMachine stateMachine, GameController gameController, GameInputManager gameInputManager)
     {
         this.stateMachine = stateMachine;
         this.gameController = gameController;
+        this.gameInputManager = gameInputManager;
     }
 
     public void Process()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (gameInputManager.IsClickClicked())
         {
-            Space space = gameController.GetSpaceClicked(Input.mousePosition);
+            Space space = gameController.GetSpaceClicked(gameInputManager.GetMousePoint());
             if (space != null && space.IsSelectable())
             {
                 Piece piece = gameController.GetSelectedPiece();
@@ -25,7 +27,7 @@ public class TurnMovePieceState : IState
                 gameController.MakeAllSpacesUnselectable();
                 stateMachine.SetCurrentState(IState.State.Turn_Decision_Making);
             }
-        } else if (Input.GetMouseButtonDown(1))
+        } else if (gameInputManager.IsRightClickClicked())
         {
             gameController.DeselectSelectedPiece();
             gameController.MakeAllSpacesUnselectable();
